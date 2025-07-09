@@ -1,0 +1,101 @@
+[
+    {
+        "titleText": "Matar al de cuerdas",
+        "mapSrc": "./images/split_1_aft_map.png",
+        "povSrc": "./images/split_1_aft_pov.png",
+        "desc": "Cuando escuches a alguien bajar la cuerda o tirarse a vents, este aftershock te va a regalar una kill o lo va a obligar a volver a subir rapidamente",
+        "nombre": "Domix",
+        "fecha": "2025-02-12T06:28:00.000",
+        "mapa": "split",
+        "agente": "breach",
+        "habilidad": "aftershock"
+    },
+    {
+        "titleText": "Aftershock a la skye",
+        "mapSrc": "./images/split_2_aft_map.png",
+        "povSrc": "./images/split_2_aft_pov.png",
+        "desc": "Cuando escuches que la Skye tire perro inicio de ronda, esperá medio segundo y tirale este aftershock, no hay chance de que sobreviva. Después entra a torre para que no te peekeen desde main",
+        "nombre": "Domix",
+        "fecha": "2025-02-12T06:31:00.000",
+        "mapa": "split",
+        "agente": "breach",
+        "habilidad": "aftershock"
+    },
+    {
+        "titleText": "Rush rampa",
+        "mapSrc": "./images/split_3_flash_map.png",
+        "povSrc": "./images/split_3_flash_pov.png",
+        "desc": "Esta flash es muy buena para cuando haya que ganar main antes de pasar al site, o para rushear rampa. La podés acompañar con aftershor o un stunt",
+        "nombre": "Domix",
+        "fecha": "2025-02-12T06:35:00.000",
+        "mapa": "split",
+        "agente": "breach",
+        "habilidad": "flash"
+    },
+    {
+        "titleText": "Strongholdear main de A split",
+        "mapSrc": "./images/split_4_stunt_map.png",
+        "povSrc": "./images/split_4_stunt_pov.png",
+        "desc": "Si ves en el minimapa que están pasando rampa, o si te callean que hay mucho ruido en main, podés tirar este stunt para frenar el push a rampa y aún así stuntear a la gente que todavía está en main. Después de tu stunt deberías callearle a tus compañeros que peekeen main",
+        "nombre": "Domix",
+        "fecha": "2025-02-12T06:38:00.000",
+        "mapa": "split",
+        "agente": "breach",
+        "habilidad": "stunt"
+    },
+    {
+        "titleText": "Agresiva main de B abyss",
+        "mapSrc": "./images/abyss_1_stunt_map.png",
+        "povSrc": "./images/abyss_1_stunt_pov.png",
+        "desc": "Con este stunt podés rushear site con tu jett. Le calleas que tire updraft y dash hacia heaven y vos la acompañás abajo con una flash",
+        "nombre": "Domix",
+        "fecha": "2025-02-12T06:40:00.000",
+        "mapa": "abyss",
+        "agente": "breach",
+        "habilidad": "stunt"
+    },
+    {
+        "titleText": "Flash para entry A abyss",
+        "mapSrc": "./images/abyss_2_flash_map.png",
+        "povSrc": "./images/abyss_2_flash_pov.png",
+        "desc": "Es importante maximizar la cantidad de enemigos flasheados para el entry, y con esta flash vas a cegar a los de backsite a la izquierda y a la derechea, y al de heaven",
+        "nombre": "Domix",
+        "fecha": "2025-02-12T06:42:00.000",
+        "mapa": "abyss",
+        "agente": "breach",
+        "habilidad": "flash"
+    },
+    {
+        "titleText": "Aftershock a la op",
+        "mapSrc": "./images/heaven_1_aft_map.png",
+        "povSrc": "./images/heaven_1_aft_pov.png",
+        "desc": "Perfecto para cyphers camperos o para después de flashear a la op, que probablemente se esconda ahí",
+        "nombre": "Domix",
+        "fecha": "2025-02-12T06:44:00.000",
+        "mapa": "heaven",
+        "agente": "breach",
+        "habilidad": "aftershock"
+    },
+    {
+        "titleText": "Correr corta inicio de ronda",
+        "mapSrc": "./images/heaven_2_stunt_map.png",
+        "povSrc": "./images/heaven_2_stunt_pov.png",
+        "desc": "Este stunt es muy bueno para caundo los enemigos suelen campear en corta con escopeta. Deberías callearle a tu dueslista el stunt y que el pushee corta",
+        "nombre": "Domix",
+        "fecha": "2025-02-12T06:47:00.000",
+        "mapa": "heaven",
+        "agente": "breach",
+        "habilidad": "stunt"
+    },
+    {
+        "titleText": "Aftershock al sova",
+        "mapSrc": "./images/heaven_3_aft_map.png",
+        "povSrc": "./images/heaven_3_aft_pov.png",
+        "desc": "Con este aftershock vas a poder matar fácilmente al sova meientras dronea, el birm mientras pone humos, etc, pero además vas a obligar a todos los que estén cerca a exponerse a site",
+        "nombre": "Domix",
+        "fecha": "2025-02-12T06:49:00.000",
+        "mapa": "heaven",
+        "agente": "breach",
+        "habilidad": "aftershock"
+    }
+]

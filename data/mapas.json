@@ -1,0 +1,46 @@
+[
+{
+    "nombre": "abyss",
+    "compPool": true 
+},
+{
+    "nombre": "ascent",
+    "compPool": false 
+},
+{
+    "nombre": "bind",
+    "compPool": true 
+},
+{
+    "nombre": "breeze",
+    "compPool": false 
+},
+{
+    "nombre": "fracture",
+    "compPool": true 
+},
+{
+    "nombre": "heaven",
+    "compPool": true 
+},
+{
+    "nombre": "icebox",
+    "compPool": false 
+},
+{
+    "nombre": "lotus",
+    "compPool": true 
+},
+{
+    "nombre": "pearl",
+    "compPool": true 
+},
+{
+    "nombre": "split",
+    "compPool": true 
+},
+{
+    "nombre": "sunset",
+    "compPool": false 
+}
+]

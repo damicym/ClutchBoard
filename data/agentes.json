@@ -1,0 +1,237 @@
+[
+    {
+        "nombre": "astra",
+        "habilidades": {    
+            "h1": "pull",
+            "h2": "stunt",
+            "h3": "smoke",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "breach",
+        "habilidades": {    
+            "h1": "aftershock",
+            "h2": "flash",
+            "h3": "stunt",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "brimstone",
+        "habilidades": {    
+            "h1": "beacon",
+            "h2": "molly",
+            "h3": "smoke",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "chamber",
+        "habilidades": {    
+            "h1": "trademark",
+            "h2": "headhunter",
+            "h3": "tp",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "clove",
+        "habilidades": {    
+            "h1": "healing",
+            "h2": "decay",
+            "h3": "smoke",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "cypher",
+        "habilidades": {    
+            "h1": "wire",
+            "h2": "cage",
+            "h3": "camera",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "deadlock",
+        "habilidades": {    
+            "h1": "gravnet",
+            "h2": "sensor",
+            "h3": "wall",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "fade",
+        "habilidades": {    
+            "h1": "prowler",
+            "h2": "pull",
+            "h3": "spotter",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "gekko",
+        "habilidades": {    
+            "h1": "molly",
+            "h2": "wingman",
+            "h3": "flash",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "harbor",
+        "habilidades": {    
+            "h1": "cascade",
+            "h2": "smoke orb",
+            "h3": "wall",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "iso",
+        "habilidades": {    
+            "h1": "wall",
+            "h2": "vulnerable",
+            "h3": "shield",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "jett",
+        "habilidades": {    
+            "h1": "smoke",
+            "h2": "updraft",
+            "h3": "dash",
+            "h4": "ulti",
+            "h5": "drift (soar)"
+        }
+    },
+    {
+        "nombre": "kayo",
+        "habilidades": {    
+            "h1": "molly",
+            "h2": "flash",
+            "h3": "knife",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "killjoy",
+        "habilidades": {    
+            "h1": "molly",
+            "h2": "alarmbot",
+            "h3": "turret",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "neon",
+        "habilidades": {    
+            "h1": "wall",
+            "h2": "stunt",
+            "h3": "dash (run)",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "omen",
+        "habilidades": {    
+            "h1": "tp",
+            "h2": "paranoia",
+            "h3": "smoke",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "phoenix",
+        "habilidades": {    
+            "h1": "wall",
+            "h2": "molly",
+            "h3": "flash",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "raze",
+        "habilidades": {    
+            "h1": "rumba",
+            "h2": "satchel",
+            "h3": "grenade",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "reyna",
+        "habilidades": {    
+            "h1": "eye",
+            "h2": "healing",
+            "h3": "dismiss",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "sage",
+        "habilidades": {    
+            "h1": "wall",
+            "h2": "slow",
+            "h3": "healing",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "skye",
+        "habilidades": {    
+            "h1": "healing",
+            "h2": "dog",
+            "h3": "flash",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "sova",
+        "habilidades": {    
+            "h1": "dron",
+            "h2": "shock dart",
+            "h3": "recon bolt",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "tejo",
+        "habilidades": {    
+            "h1": "drone",
+            "h2": "stunt",
+            "h3": "missiles",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "viper",
+        "habilidades": {    
+            "h1": "molly",
+            "h2": "smoke orb",
+            "h3": "wall",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "vyse",
+        "habilidades": {    
+            "h1": "slow",
+            "h2": "wall",
+            "h3": "flash",
+            "h4": "ulti"
+        }
+    },
+    {
+        "nombre": "yoru",
+        "habilidades": {    
+            "h1": "clone",
+            "h2": "flash",
+            "h3": "tp",
+            "h4": "ulti"
+        }
+    }
+]

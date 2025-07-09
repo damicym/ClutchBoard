@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breac-html | Habilidades</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+</head>
+
+<body>
+
+    <nav>
+        <a class="main_title" href="index.html">
+            <h1 class="home-navbar" style="color: rgb(189, 99, 47);">Breac-html</h1>
+        </a>
+        <a class="navbar-link" href="index.html">Home</a>
+        <a style="text-decoration: underline;" class="navbar-link" href="habilidades.html">Habilidades</a>
+        <a class="navbar-link" href="crear.html">Crear</a>
+    </nav>
+
+    <p>Este es nuestro repertorio de habilidades (poné el cursor en un <span
+            style="color:#BD632F;; font-weight: 500;">mapa</span> para agrandarlo). Si te interesa, podés <a
+            class="mi-link" href="crear.html">crear</a> tu propio artículo para que cualquiera pueda
+        aprender tu jugada</p>
+    <form id="form-hb">
+        <div class="max-filter-container">
+
+            <div class="filter-search-container">
+                <div name="para q no haya gap" style="display: flex; flex-direction:row;">
+                    <button onclick="vaciarInput()" type="button" class="icon-filter-button"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                            class="bi bi-trash-fill" id="basura" viewBox="1.7 0 16 14.4">
+                            <path
+                                d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                        </svg></button>
+                    <div class="filter-container">
+                        <label class="filter-label">Filtros</label>
+                        <label class="checkbox-label"
+                            style="color: #D8C99B; font-size: 1rem; display: flex; align-items: center; user-select: none;">
+                            <input type="checkbox" id="comp-input-form-hb">
+                            <span class="custom-checkbox"></span>
+                            Rotación competitiva
+
+                        </label>
+                        <div class="select-filter-container">
+                            <select name="mapa-input-form-hb" id="mapa-input-form-hb">
+                                <option value="">Elige un mapa</option>
+                            </select>
+                            <select name="agente-input-form-hb" id="agente-input-form-hb">
+                                <option value="">Elige un agente</option>
+                            </select>
+                            <select name="habilidad-input-form-hb" id="habilidad-input-form-hb">
+                                <option value="">Elige una habilidad</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            <!-- </div>
+        </div> -->
+        <!-- los 2 /divs de aca arriba los puse recién -->
+    <!-- </form> -->
+    <!-- el form de aca arriba lo muevo para abajo -->
+
+    <div class="search-container">
+        <label class="filter-label" style="color: #D8C99B; display: flex; align-items: center;">Autor</label>
+        <input id="autor-input-form-hb" type="text" autocomplete="off" class="input-form-hb" placeholder="ej.: domix">
+        <!-- <button class="vaciar-autor-button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+          </svg></button> -->
+    </div>
+    <!-- filter-serach-container: -->
+    </div>
+    <div class="ordenar-container">
+        <label class="filter-label" style="color: #D8C99B; display: flex; align-items: center;">Ordenar por</label>
+        <select name="ordenar-select" id="order-input-form-hb">
+            <option value="agente">Agente</option>
+            <option value="mapa">Mapa</option>
+        </select>
+    </div>
+
+    </div>
+</form>
+    <div id="maxContainer"></div>
+    <script src="habilidades.js"></script>
+
+</body>
+
+</html>
