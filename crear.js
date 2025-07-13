@@ -2,25 +2,271 @@
 const selectHabilidad = document.getElementById('habilidad')
 const povPreview = document.getElementById('pov-preview')
 const mapPreview = document.getElementById('map-preview')
-const inputHabilidad = document.getElementById('habilidad')
+const inputHabilidad = document.getElementById('habilidad') //asas
+const agenteSelect = document.getElementById('agente-select')
 const formCrear = document.getElementById('form-crear')
 const inputPov = document.getElementById('input-pov')
 const inputMap = document.getElementById('input-map')
+const povMenu = document.getElementById('pov-menu');
+const mapMenu = document.getElementById('map-menu');
+const pegarPov = document.getElementById('pegar-pov')
+const pegarMap = document.getElementById('pegar-map')
+const eliminarPovButton = document.getElementById('eliminar-pov-button')
+const eliminarMapButton = document.getElementById('eliminar-map-button')
+const astBeforeTitle = document.getElementById('ast-before-title')
+
 let povFilePegada = null;
 let mapFilePegada = null;
+let prevPovObjectURL = null;
+let prevMapObjectURL = null;
 
-function openModalPov() {
-    // inputPov.click()
+// ----------input de imgs y previews-------------
+// que se haga con entre y espacio (hay q ponerle tabindex 0 a los html)
+// povPreview.addEventListener('keydown', e => {
+//   if (e.key === 'Enter' || e.key === ' ') {
+//     e.preventDefault(); // Previene scroll si se presiona espacio
+//     povPreview.click();
+//   }
+// });
+// mapPreview.addEventListener('keydown', e => {
+//   if (e.key === 'Enter' || e.key === ' ') {
+//     e.preventDefault(); // Previene scroll si se presiona espacio
+//     mapPreview.click()
+//   }
+// });
+document.addEventListener('keydown', e => {
+    if(e.key === 'Escape'){
+        povMenu.classList.remove('abierto');
+        povPreview.classList.remove('preview-activo');
+        mapMenu.classList.remove('abierto');
+        mapPreview.classList.remove('preview-activo');
+    }
+});
+document.addEventListener('click', e => {
+  cerrarUploadMenusSiTocaAfuera(e);
+});
+document.addEventListener('contextmenu', e => {
+  cerrarUploadMenusSiTocaAfuera(e);
+});
+eliminarPovButton.addEventListener('click', () => {
+    resetPovNPreview()
+    povFilePegada = null
+    povPreview.classList.remove('preview-activo');
+    povMenu.classList.remove('abierto')
+    inputPov.setAttribute('required', '');
+})
+function cerrarUploadMenusSiTocaAfuera(e) {
+  if (!povMenu.contains(e.target) && e.target !== povPreview) {
+    povMenu.classList.remove('abierto');
+    povPreview.classList.remove('preview-activo');
+  }
+  if (!mapMenu.contains(e.target) && e.target !== mapPreview) {
+    mapMenu.classList.remove('abierto');
+    mapPreview.classList.remove('preview-activo');
+  }
+}
+function clickInputPov() {
+  inputPov.click();
+}
+povPreview.addEventListener('click', e => {
+  povPreview.classList.add('preview-activo');
+  mapPreview.classList.remove('preview-activo');
+  mostrarMenu(povMenu, mapMenu, e);
+});
+eliminarMapButton.addEventListener('click', () => {
+    resetMapNPreview()
+    mapFilePegada = null
+    mapPreview.classList.remove('preview-activo');
+    mapMenu.classList.remove('abierto')
+})
+povPreview.addEventListener('contextmenu', e => {
+  e.preventDefault();
+  povPreview.classList.add('preview-activo');
+  mapPreview.classList.remove('preview-activo');
+  mostrarMenu(povMenu, mapMenu, e);
+});
+function clickInputMap() {
+  inputMap.click();
+}
+mapPreview.addEventListener('click', e => {
+  mapPreview.classList.add('preview-activo');
+  povPreview.classList.remove('preview-activo');
+  mostrarMenu(mapMenu, povMenu, e);
+});
+mapPreview.addEventListener('contextmenu', e => {
+  e.preventDefault();
+  mapPreview.classList.add('preview-activo');
+  povPreview.classList.remove('preview-activo');
+  mostrarMenu(mapMenu, povMenu, e);
+});
+async function mostrarMenu(menuPrincipal, menuSecundario, e) {
+    menuPrincipal.style.left = `${e.clientX}px`;
+    menuPrincipal.style.top = `${e.clientY}px`;
+    menuPrincipal.classList.add('abierto');
+    menuSecundario.classList.remove('abierto');
+    const pegarButtonTarget = menuPrincipal.querySelectorAll('[id^="pegar-"]')[0];
+    const items = await navigator.clipboard.read();
+    if (items.length > 0) {
+    const item = items[0];
+    for (const type of item.types) {
+        if (type.startsWith('image/')) {
+            habilitarButton(pegarButtonTarget)
+        return;
+        }
+    }
+        deshabilitarButton(pegarButtonTarget)
+    } else {
+        deshabilitarButton(pegarButtonTarget)
+    }
+}
+function deshabilitarButton(button){
+    button.setAttribute('disabled', '')
+    button.innerHTML = `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-off"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5.575 5.597a2 2 0 0 0 -.575 1.403v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2m0 -4v-8a2 2 0 0 0 -2 -2h-2" /><path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 1 1 0 4h-2" /><path d="M3 3l18 18" /></svg>
+        Pegar de portapapeles`
+}
+function habilitarButton(button){
+    button.removeAttribute('disabled')
+    button.innerHTML = ` <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>
+        Pegar de portapapeles`
 }
 
-function openModalMap() {
-    // inputMap.click()
+
+function resetPovNPreview() {
+    if (prevPovObjectURL) {
+        URL.revokeObjectURL(prevPovObjectURL);
+        prevPovObjectURL = null;
+    }
+    inputPov.value = ''
+    povPreview.src = "./images/pov-select.png"
+    povPreview.style.border = "10px solid #273E47"
+    povPreview.style.borderRadius = "10px"
 }
+pegarPov.addEventListener('click', async () => {
+    const items = await navigator.clipboard.read();
+    if (items.length > 0) {
+    const item = items[0];
+    for (const type of item.types) {
+        if (type.startsWith('image/')) {
+        povFilePegada = await item.getType(type);
+        povPreview.classList.remove('preview-activo');
+        povMenu.classList.remove('abierto')
+        inputPov.value = ''
+        inputPov.removeAttribute('required');
+        generarPovPreview(povFilePegada)
+        return;
+        }
+    }
+    alert('No se encontró imagen en el portapapeles.');
+    } else {
+    alert('El portapapeles está vacío.');
+    }
+    povMenu.style.display = 'none';
+    povPreview.classList.remove('preview-activo');
+    povMenu.classList.remove('abierto')
+})
+pegarMap.addEventListener('click', async () => {
+    const items = await navigator.clipboard.read();
+    if (items.length > 0) {
+    const item = items[0];
+    for (const type of item.types) {
+        if (type.startsWith('image/')) {
+        mapFilePegada = await item.getType(type);
+        mapPreview.classList.remove('preview-activo');
+        mapMenu.classList.remove('abierto')
+        inputMap.value = ''
+        generarMapPreview(mapFilePegada)
+        return;
+        }
+    }
+    alert('No se encontró imagen en el portapapeles.');
+    } else {
+    alert('El portapapeles está vacío.');
+    }
+    mapMenu.style.display = 'none';
+    mapPreview.classList.remove('preview-activo');
+    mapMenu.classList.remove('abierto')
+})
+inputPov.addEventListener('change', event => {
+    const povFileInput = event.target
+    const povFile = povFileInput.files[0]
+    povFilePegada = null;
+    inputPov.setAttribute('required', '');
+    generarPovPreview(povFile)
+})
+function generarPovPreview(povFile) {
+    const maxSizeMB = 25;
+
+    if (povFile) {
+        if(!povFile.type.startsWith('image/')){
+            alert('Solo se pueden subir imágenes.');
+            resetPovNPreview()
+        }
+        else{
+            if(povFile.size > maxSizeMB * 1024 * 1024){
+                alert(`La imagen debe pesar menos de ${maxSizeMB}MB).`);
+                resetPovNPreview()
+            }else{
+                if (prevPovObjectURL) {
+                    URL.revokeObjectURL(prevPovObjectURL);
+                }
+                prevPovObjectURL = URL.createObjectURL(povFile);
+                povPreview.style.display = 'inline-block';
+                povPreview.style.border = '0px';
+                povPreview.src = prevPovObjectURL;
+            }
+        }
+    }
+    else { resetPovNPreview() }
+    astBeforeTitle.focus()
+}
+inputMap.addEventListener('change', event => {
+    const mapFileInput = event.target
+    const mapFile = mapFileInput.files[0]
+    mapFilePegada = null
+    generarMapPreview(mapFile)
+})
+function generarMapPreview(mapFile){
+    const maxSizeMB = 25;
+
+    if (mapFile) {
+        if(!mapFile.type.startsWith('image/')){
+            alert('Solo se pueden subir imágenes.');
+            resetMapNPreview()
+        }else{
+            if(mapFile.size > maxSizeMB * 1024 * 1024){
+            alert(`La imagen debe pesar menos de ${maxSizeMB}MB).`);
+            resetMapNPreview()
+            }else{
+                if (prevMapObjectURL) {
+                    URL.revokeObjectURL(prevMapObjectURL);
+                }
+                prevMapObjectURL = URL.createObjectURL(mapFile);
+                mapPreview.style.display = 'inline-block'
+                mapPreview.style.border = "3px solid rgb(216, 151, 60)"
+                mapPreview.src = prevMapObjectURL;
+            }
+        }
+    }
+    else resetMapNPreview()
+    astBeforeTitle.focus()
+}
+
+function resetMapNPreview() {
+    if (prevMapObjectURL) {
+        URL.revokeObjectURL(prevMapObjectURL);
+        prevMapObjectURL = null;
+    }
+
+    inputMap.value = ''
+    mapPreview.src = "./images/map-select.png"
+    mapPreview.style.border = "3px solid #D8973C"
+    mapPreview.style.opacity = "1"
+}
+//-----------fin de input de imgs y previews-------------
 
 function capitalizeFirstLetter(val) {
     return String(val).charAt(0).toUpperCase() + String(val).slice(1)
 }
-
 var agentes = {}
 
 const mostrarFecha = () => {
@@ -39,8 +285,6 @@ const mostrarFecha = () => {
 }
 mostrarFecha()
 
-
-
 fetch('data/agentes.json')
     .then(data => data.json())
     .then(data => {
@@ -48,7 +292,7 @@ fetch('data/agentes.json')
 
         agentes.map(agente => {
             let opcion = `<option value="${agente.nombre}">${capitalizeFirstLetter(agente.nombre)}</option>`
-            document.getElementById('agente').innerHTML += opcion
+            agenteSelect.innerHTML += opcion
         })
     })
 
@@ -57,7 +301,7 @@ function uncapitalize(str) {
     return str.charAt(0).toLowerCase() + str.slice(1)
 }
 
-document.getElementById('agente').addEventListener('change', event => {
+agenteSelect.addEventListener('change', event => {
     const agenteSeleccionado = event.target.value
     const indice = agentes.findIndex(obj => obj.nombre === agenteSeleccionado)
     const agente = agentes[indice]
@@ -84,91 +328,8 @@ document.getElementById('agente').addEventListener('change', event => {
     }
 })
 
-function resetPovNPreview() {
-    inputPov.value = ''
-    povPreview.src = "./images/pov-placeholder.png"
-    povPreview.style.border = "10px solid #273E47"
-    povPreview.style.borderRadius = "10px"
-}
-document.getElementById('pegarPov').addEventListener('click', async () => {
-    const items = await navigator.clipboard.read();
-    console.log(items)
-    if (items.length > 0) {
-    const item = items[0];
-    console.log(item)
-    for (const type of item.types) {
-        if (type.startsWith('image/')) {
-        povFilePegada = await item.getType(type);
-        generarPovPreview(povFilePegada)
-        return;
-        }
-    }
-    alert('No se encontró imagen en el portapapeles.');
-    } else {
-    alert('El portapapeles está vacío.');
-    }
-})
-inputPov.addEventListener('change', event => {
-    const povFileInput = event.target
-    const povFile = povFileInput.files[0]
-    povFilePegada = null;
-    generarPovPreview(povFile)
-})
-function generarPovPreview(povFile) {
-    const maxSizeMB = 25;
 
-    if (povFile) {
-        if(!povFile.type.startsWith('image/')){
-            alert('Solo se pueden subir imágenes.');
-            resetPovNPreview()
-        }
-        else{
-            if(povFile.size > maxSizeMB * 1024 * 1024){
-                alert(`La imagen debe pesar menos de ${maxSizeMB}MB).`);
-                resetPovNPreview()
-            }else{
-            povPreview.style.display = 'inline-block'
-            povPreview.style.border = "0px"
-            povPreview.src = URL.createObjectURL(povFile)
-            }
-        }
-    }
-    else resetPovNPreview()
-}
-inputMap.addEventListener('change', event => {
-    const mapFileInput = event.target
-    const mapFile = mapFileInput.files[0]
-    generarMapPreview(mapFile)
-})
-function generarMapPreview(mapFile){
-    const maxSizeMB = 25;
-
-    if (mapFile) {
-        if(!mapFile.type.startsWith('image/')){
-            alert('Solo se pueden subir imágenes.');
-            resetMapNPreview()
-        }else{
-            if(mapFile.size > maxSizeMB * 1024 * 1024){
-            alert(`La imagen debe pesar menos de ${maxSizeMB}MB).`);
-            resetMapNPreview()
-            }else{
-                mapPreview.style.display = 'inline-block'
-                mapPreview.style.border = "3px solid rgb(216, 151, 60)"
-                mapPreview.src = URL.createObjectURL(mapFile)
-            }
-        }
-    }
-    else resetMapNPreview()
-}
-
-
-function resetMapNPreview() {
-    inputMap.value = ''
-    mapPreview.src = "./images/map-placeholder.png"
-    mapPreview.style.border = "3px solid #D8973C"
-    mapPreview.style.opacity = "1"
-}
-document.getElementById('agente').addEventListener('change', event => {
+agenteSelect.addEventListener('change', event => {
 
     inputHabilidad.disabled = !event.target.value
     if (!event.target.value) inputHabilidad.value = ""
@@ -198,12 +359,11 @@ function postCardSiImgListas(povReady, mapReady, nuevaCard){
         .catch(error => console.error('Error al guardar la card:', error));
     }
 }
-formCrear.addEventListener('submit', event => {
+
+// descomentar
+async function usarFormObject(formObject){
     let povReady = false
     let mapReady = false
-    event.preventDefault()
-    const formData = new FormData(event.target)
-    const formObject = Object.fromEntries(formData.entries())
 
     const opcionesfecha = {
         day: '2-digit',
@@ -217,89 +377,110 @@ formCrear.addEventListener('submit', event => {
     // .toLocaleString('es-ES', opcionesfecha).replace(',', ' •')
     formObject.fecha = fechaHoy.toISOString()
 
-    // if (povFilePegada) {
-    // inputPov.removeAttribute('required');
-    // } else {
-    // inputPov.setAttribute('required', '');
-    // }
     const povFileFinal = povFilePegada || formObject.povSrc;
     if (povFileFinal) {
-    let reader = new FileReader();
-    reader.readAsDataURL(povFileFinal);
-    reader.onload = () => {
-        const img = new Image();
-        img.src = reader.result;
+        let reader = new FileReader();
+        reader.readAsDataURL(povFileFinal);
+        reader.onload = () => {
+            const img = new Image();
+            img.src = reader.result;
 
-        img.onload = () => {
-            // Crear un canvas para redibujar la imagen
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            
-            // Establecer las dimensiones del canvas igual a las de la imagen
-            canvas.width = img.width;
-            canvas.height = img.height;
-            
-            // Dibujar la imagen en el canvas
-            ctx.drawImage(img, 0, 0);
-            
-            // Convertir el canvas a WebP (calidad: 0.8, puedes ajustarlo)
-            canvas.toBlob((blob) => {
-                const webpReader = new FileReader();
-                webpReader.readAsDataURL(blob);
-                webpReader.onload = () => {
-                    formObject.povSrc = webpReader.result; // Ahora es WebP en base64
-                    povReady = true;
-                    postCardSiImgListas(povReady, mapReady, formObject);
-                };
-            }, 'image/webp', 0.8); // 0.8 es la calidad (0 a 1)
+            img.onload = () => {
+                // Crear un canvas para redibujar la imagen
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Establecer las dimensiones del canvas igual a las de la imagen
+                canvas.width = img.width;
+                canvas.height = img.height;
+                
+                // Dibujar la imagen en el canvas
+                ctx.drawImage(img, 0, 0);
+                
+                // Convertir el canvas a WebP (calidad: 0.8, puedes ajustarlo)
+                canvas.toBlob((blob) => {
+                    const webpReader = new FileReader();
+                    webpReader.readAsDataURL(blob);
+                    webpReader.onload = () => {
+                        formObject.povSrc = webpReader.result; // Ahora es WebP en base64
+                        povReady = true;
+                        URL.revokeObjectURL(img.src)
+                        img.src = ''
+                        postCardSiImgListas(povReady, mapReady, formObject);
+                    };
+                    webpReader.onloadend = () => {
+                        webpReader = null;
+                    };
+                }, 'image/webp', 0.8); // 0.8 es la calidad (0 a 1)
+            };
+            img.onerror = () => {
+            console.error("No se pudo cargar la imagen para convertir a WebP");
+            };
         };
-    };
-}
-const povMapFinal = mapFilePegada || formObject.mapSrc;
-if (povMapFinal) {
-    let reader = new FileReader();
-    reader.readAsDataURL(povMapFinal);
-    reader.onload = () => {
-        const img = new Image();
-        img.src = reader.result;
+    }
 
-        img.onload = () => {
-            // Crear un canvas para redibujar la imagen
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            
-            // Establecer las dimensiones del canvas igual a las de la imagen
-            canvas.width = img.width;
-            canvas.height = img.height;
-            
-            // Dibujar la imagen en el canvas
-            ctx.drawImage(img, 0, 0);
-            
-            // Convertir el canvas a WebP (calidad: 0.8, puedes ajustarlo)
-            canvas.toBlob((blob) => {
-                const webpReader = new FileReader();
-                webpReader.readAsDataURL(blob);
-                webpReader.onload = () => {
-                    formObject.mapSrc = webpReader.result; // Ahora es WebP en base64
-                    mapReady = true;
-                    postCardSiImgListas(povReady, mapReady, formObject);
-                };
-            }, 'image/webp', 0.8); // 0.8 es la calidad (0 a 1)
+    const povMapFinal = mapFilePegada || formObject.mapSrc;
+    if (povMapFinal) {
+        let reader = new FileReader();
+        reader.readAsDataURL(povMapFinal);
+        reader.onload = () => {
+            const img = new Image();
+            img.src = reader.result;
+
+            img.onload = () => {
+                // Crear un canvas para redibujar la imagen
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Establecer las dimensiones del canvas igual a las de la imagen
+                canvas.width = img.width;
+                canvas.height = img.height;
+                
+                // Dibujar la imagen en el canvas
+                ctx.drawImage(img, 0, 0);
+                
+                // Convertir el canvas a WebP (calidad: 0.8, puedes ajustarlo)
+                canvas.toBlob((blob) => {
+                    const webpReader = new FileReader();
+                    webpReader.readAsDataURL(blob);
+                    webpReader.onload = () => {
+                        formObject.mapSrc = webpReader.result; // Ahora es WebP en base64
+                        mapReady = true;
+                        URL.revokeObjectURL(img.src)
+                        img.src = ''
+                        postCardSiImgListas(povReady, mapReady, formObject);
+                    };
+                    webpReader.onloadend = () => {
+                        webpReader = null;
+                    };
+                }, 'image/webp', 0.8); // 0.8 es la calidad (0 a 1)
+            };
+            img.onerror = () => {
+            console.error("No se pudo cargar la imagen para convertir a WebP");
+            };
         };
-    };
+    }
 }
 
-    // revisar esto pq vacairinput no recibe parametros
-    // const keysArray = [...formData.keys()]
-    // vaciarInput(keysArray)
-    vaciarInput()
-    const toastTrigger = document.getElementById('liveToastBtn')
+formCrear.addEventListener('submit', async(event) => {
+    // mostrarToasts()
     const toastLiveExample = document.getElementById('liveToast')
+    toastLiveExample.classList.add('loading')
     const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
     toastBootstrap.show()
-    //si no tengo nada, ageragr 1 form
-    //si ya tengo uno, cambiar 'form' a 'form1'
-    // const storageLength = localStorage.length
-    // localStorage.setItem(`form${storageLength +  1}`, JSON.stringify(formObject))
+    
+    event.preventDefault()
+    const formData = new FormData(event.target)
+    const formObject = Object.fromEntries(formData.entries())
+    await usarFormObject(formObject)
+    
+    vaciarInput()
+    toastLiveExample.classList.add('ready')
+    // toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+    toastBootstrap.show()
 })
+
+// function mostrarToasts(){
+    
+// }
 

@@ -9,8 +9,54 @@
     --color5-alpha: rgba(39, 62, 71, 0.6);
     --color6: #757574;
     --color2-aplha: #d8c99b00;
+    --color7: #C8BD94;
 }
-
+.uploadMenu.abierto {
+  transform: scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+.uploadMenu{
+    /* display: none; */
+    position: fixed;
+    background-color: var(--color7);
+    height: min-content;
+    width: 285px;
+    border: none;
+    border-radius: 3px;
+    padding: 10px;
+    z-index: 99;
+    opacity: 0;
+    transform-origin: top left;
+    transform: scale(0.8);
+    pointer-events: none;
+    transition: transform 150ms ease-out, opacity 150ms ease-out;
+}
+.uploadMenu button{
+    text-align: left;
+    padding: 5px;
+    width: 100%;
+    border: none;
+    background-color: var(--color7);
+    color: var(--color5);
+    font-size: 1.2rem;
+    border-radius: 3px;
+    font-weight: 500;
+    user-select: none;
+}
+.uploadMenu button:last-child{
+    color: var(--color1);
+}
+.uploadMenu button:hover{
+    background-color: var(--color2);
+}
+.uploadMenu button[type="button"]:disabled {
+    opacity: 0.5;
+    cursor: auto;
+}
+.uploadMenu button[type="button"]:disabled:hover {
+    background-color: var(--color7);
+}
 .btn.btn-success {
     background-color: var(--color4);
     border: 2px;
@@ -21,6 +67,9 @@
     transition: all .3s;
 }
 
+.form-crear input[type="text"]::placeholder, textarea::placeholder {
+    color: var(--color5-alpha);
+}
 .btn.btn-success:hover {
     color: var(--color5);
     transform: scale(1.1);
@@ -32,14 +81,20 @@
     border-radius: 3px;
     text-decoration: none;
     color: var(--color2);
-    font-size: 1.3rem;
-    transition: all .2s;
+    font-size: 1.6rem;
+    transition: ease-out .2s;
     margin-top: 15px;
+    box-shadow: 0px 0px 10px var(--color2);
+    padding: 5px;
+    font-weight: 500;
 }
 
 .btn.btn-light:hover {
     color: var(--color3);
-    transform: scale(1.05);
+    transform: scale(1.01);
+    transform: translateY(-1px);
+    box-shadow: 0px 0px 20px var(--color2);
+    font-size: 1.61rem;
 }
 
 nav {
@@ -145,6 +200,7 @@ h2 {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    /* margin-top: 150px; */
     /* border: 1px solid red; */
 }
 
@@ -160,6 +216,7 @@ h2 {
     flex-direction: column;
     gap: 10px;
     margin: 0px;
+    /* margin-top: 50px; */
     max-width: 90%;
 }
 
@@ -173,8 +230,8 @@ h2 {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    height: 250px;
-    width: 300px;
+    height: 270px;
+    width: 310px;
     margin: 0px;
 }
 
@@ -196,8 +253,10 @@ select {
     background-color: var(--color2);
     color: var(--color5);
     cursor: pointer;
-    /* transition: all 0.3s ease; */
+    transition: all 0.3s ease;
     outline: none;
+    padding: 5px;
+    font-weight: 500;
 }
 
 select::-webkit-scrollbar {
@@ -210,7 +269,7 @@ select::-webkit-scrollbar-thumb {
 }
 
 select::-webkit-scrollbar-track {
-    background: var(--color2);
+    background: var(--color7);
 }
 
 body::-webkit-scrollbar {
@@ -222,7 +281,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 body::-webkit-scrollbar-track {
-    background: var(--color2);
+    background: var(--color7);
 }
 
 .habilidad:disabled {
@@ -233,24 +292,11 @@ select:disabled {
     cursor: auto;
 }
 
-/* select:disabled:hover {
-    border-color: var(--color5);
-} */
-/* select:hover {
-    border-color: var(--color3);
-} */
-/* select:focus {
-    border-color: var(--color2);
-    outline: none;
-} */
-/* select:not(:focus) {
-    border-color: var(--color5);
-} */
-
 
 label {
     color: var(--color5);
     font-size: 1.1rem;
+    font-weight: 500px;
 }
 
 .input-form-crear::placeholder {
@@ -258,28 +304,41 @@ label {
 }
 
 .input-form-crear-title {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-style: italic;
     outline: none;
     background: none;
     border: none;
     border: 3px solid var(--color5);
     border-radius: 10px;
-    padding: 4px;
+    padding: 5px;
     width: 100%;
 }
 #pov-preview{
     transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+    will-change: transform;
+    backface-visibility: hidden;
 }
 #pov-preview:hover{
     transform: translateY(-3px);
+    /* filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5)); */
 }
 #map-preview:hover{
     transform: translateY(-3px);
+    /* filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5)); */
+}
+.preview-activo {
+  transform: translateY(-3px);
+  /* filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5)); */
 }
 #map-preview {
     transition: transform 0.2s ease-in-out;
     top: 10px;
+    cursor: pointer;
+    will-change: transform;
+    backface-visibility: hidden;
+    z-index: 10;
 }
 .ast {
     position: absolute;
@@ -312,16 +371,27 @@ label {
     75% { transform: translateX(-3px); }
     100% { transform: translateX(0); }
 }
-.firma {
-    color: var(--color5);
-    font-style: italic;
+
+.firma{
     position: absolute;
     bottom: 2px;
+}
+.autor{
+    color: var(--color5);
+    font-style: italic;
     font-size: 0.9rem;
+}
+.fecha-card{
+    color: var(--color5);
+    font-size: 0.9rem;
+}
+.form-crear-fecha{
+    font-size: 1rem;
 }
 
 .form-crear-firma {
     color: var(--color5);
+    /* font-size: 1rem; */
 }
 
 .input-form-crear-name {
@@ -332,20 +402,20 @@ label {
     border: none;
     border: 3px solid var(--color5);
     border-radius: 10px;
-    padding: 4px;
+    padding: 5px;
     width: 50%;
 }
 
 .input-form-crear-desc {
     resize: none;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-style: italic;
     outline: none;
     background: none;
     border: none;
     border: 3px solid var(--color5);
     border-radius: 10px;
-    padding: 4px;
+    padding: 5px;
     overflow: hidden;
 }
 
@@ -364,6 +434,8 @@ label {
     position: absolute;
     bottom: 8px;
     margin-left: 29%;
+    user-select: none;
+    
 }
 
 .pov {
@@ -432,8 +504,14 @@ h4 {
     color: rgb(39, 62, 71);
 }
 
-.mi-toast {
+.mi-toast.ready{
     background-color: var(--color4);
+}
+.mi-toast.loading{
+    background-color: var(--color5);
+}
+.mi-toast.error{
+    background-color: var(--color1);
 }
 
 .mi-button {
@@ -464,7 +542,7 @@ h4 {
     border: none;
     border: 3px solid var(--color2);
     border-radius: 10px;
-    padding: 4px;
+    padding: 5px;
     color: var(--color2);
     width: 150px;
 }
@@ -479,7 +557,7 @@ h4 {
     gap: 10px;
     width: 260px;
     background-color: var(--color5);
-    height: 30px;
+    height: 35px;
     border: 5px solid var(--color5);
     border-radius: 8px;
     justify-content: center;
@@ -491,7 +569,7 @@ h4 {
     gap: 10px;
     width: 765px;
     background-color: var(--color5);
-    height: 30px;
+    height: 35px;
     border: 5px solid var(--color5);
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
@@ -503,7 +581,7 @@ h4 {
     gap: 10px;
     width: 260px;
     background-color: var(--color5);
-    height: 30px;
+    height: 35px;
     border: 5px solid var(--color5);
     border-radius: 8px;
     padding-left: 5px;
@@ -521,7 +599,7 @@ h4 {
     border: 2px solid var(--color2);
     color: var(--color2);
     background-color: var(--color5);
-    border-radius: 30px;
+    border-radius: 35px;
     position: absolute;
 }
 
@@ -543,7 +621,7 @@ h4 {
     border-bottom-right-radius: 0;
     background-color: var(--color5);
     font-weight: bold;
-    width: 30px;
+    width: 35px;
     color: var(--color2);
     cursor: pointer;
 }
