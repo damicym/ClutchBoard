@@ -213,6 +213,7 @@ function generarPovPreview(povFile) {
                 povPreview.style.display = 'inline-block';
                 povPreview.style.border = '0px';
                 povPreview.src = prevPovObjectURL;
+                // povPreview.src = URL.createObjectURL(povFile)
             }
         }
     }
@@ -244,6 +245,7 @@ function generarMapPreview(mapFile){
                 mapPreview.style.display = 'inline-block'
                 mapPreview.style.border = "3px solid rgb(216, 151, 60)"
                 mapPreview.src = prevMapObjectURL;
+                // mapPreview.src = URL.createObjectURL(mapFile);
             }
         }
     }
@@ -360,25 +362,85 @@ function postCardSiImgListas(povReady, mapReady, nuevaCard){
     }
 }
 
-// descomentar
+// async function usarFormObject(formObject) {
+//     const fechaHoy = new Date();
+//     formObject.fecha = fechaHoy.toISOString();
+//     const povFileFinal = povFilePegada || formObject.povSrc;
+//     const mapFileFinal = mapFilePegada || formObject.mapSrc;
+
+//     if (povFileFinal instanceof Blob && povFileFinal.size > 0) {
+//         try {
+//             formObject.povSrc = await convertirAWebP(povFileFinal);
+//         } catch (error) {
+//             console.error("Error al convertir POV:", error);
+//             formObject.povSrc = '';
+//         }
+//     } else if (typeof povFileFinal === 'string' && povFileFinal.trim() !== '') {
+//         formObject.povSrc = povFileFinal;
+//     } else {
+//         formObject.povSrc = '';
+//     }
+
+//     if (mapFileFinal instanceof Blob && mapFileFinal.size > 0) {
+//         try {
+//             formObject.mapSrc = await convertirAWebP(mapFileFinal);
+//         } catch (error) {
+//             console.error("Error al convertir MAP:", error);
+//             formObject.mapSrc = '';
+//         }
+//     } else if (typeof mapFileFinal === 'string' && mapFileFinal.trim() !== '') {
+//         formObject.mapSrc = mapFileFinal;
+//     } else {
+//         formObject.mapSrc = '';
+//     }
+
+//     // Enviar card
+//     console.log(formObject)
+//     postCardSiImgListas(formObject);
+// }
+
+
+// function convertirAWebP(file) {
+//     return new Promise((resolve, reject) => {
+//         const reader = new FileReader();
+//         reader.readAsDataURL(file);
+
+//         reader.onload = () => {
+//             const img = new Image();
+//             img.src = reader.result;
+
+//             img.onload = () => {
+//                 const canvas = document.createElement('canvas');
+//                 const ctx = canvas.getContext('2d');
+//                 canvas.width = img.width;
+//                 canvas.height = img.height;
+//                 ctx.drawImage(img, 0, 0);
+
+//                 canvas.toBlob((blob) => {
+//                     const webpReader = new FileReader();
+//                     webpReader.readAsDataURL(blob);
+//                     webpReader.onload = () => {
+//                         resolve(webpReader.result);
+//                     };
+//                     webpReader.onerror = reject;
+//                 }, 'image/webp', 0.8);
+//             };
+
+//             img.onerror = reject;
+//         };
+
+//         reader.onerror = reject;
+//     });
+// }
+
 async function usarFormObject(formObject){
     let povReady = false
     let mapReady = false
-
-    const opcionesfecha = {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-    };
     const fechaHoy = new Date()
-    // .toLocaleString('es-ES', opcionesfecha).replace(',', ' •')
     formObject.fecha = fechaHoy.toISOString()
 
     const povFileFinal = povFilePegada || formObject.povSrc;
-    if (povFileFinal) {
+    if (povFileFinal.size > 0) {
         let reader = new FileReader();
         reader.readAsDataURL(povFileFinal);
         reader.onload = () => {
@@ -404,25 +466,28 @@ async function usarFormObject(formObject){
                     webpReader.onload = () => {
                         formObject.povSrc = webpReader.result; // Ahora es WebP en base64
                         povReady = true;
-                        URL.revokeObjectURL(img.src)
-                        img.src = ''
+                        // URL.revokeObjectURL(img.src)
+                        // img.src = ''
                         postCardSiImgListas(povReady, mapReady, formObject);
                     };
-                    webpReader.onloadend = () => {
-                        webpReader = null;
-                    };
+                    // webpReader.onloadend = () => {
+                    //     webpReader = null;
+                    // };
                 }, 'image/webp', 0.8); // 0.8 es la calidad (0 a 1)
             };
             img.onerror = () => {
             console.error("No se pudo cargar la imagen para convertir a WebP");
             };
         };
+    } else { 
+        povReady = true; 
+        formObject.povSrc = ''
     }
 
-    const povMapFinal = mapFilePegada || formObject.mapSrc;
-    if (povMapFinal) {
+    const mapFileFinal = mapFilePegada || formObject.mapSrc;
+    if (mapFileFinal.size > 0) {
         let reader = new FileReader();
-        reader.readAsDataURL(povMapFinal);
+        reader.readAsDataURL(mapFileFinal);
         reader.onload = () => {
             const img = new Image();
             img.src = reader.result;
@@ -446,28 +511,31 @@ async function usarFormObject(formObject){
                     webpReader.onload = () => {
                         formObject.mapSrc = webpReader.result; // Ahora es WebP en base64
                         mapReady = true;
-                        URL.revokeObjectURL(img.src)
-                        img.src = ''
+                        // URL.revokeObjectURL(img.src)
+                        // img.src = ''
                         postCardSiImgListas(povReady, mapReady, formObject);
                     };
-                    webpReader.onloadend = () => {
-                        webpReader = null;
-                    };
+                    // webpReader.onloadend = () => {
+                    //     webpReader = null;
+                    // };
                 }, 'image/webp', 0.8); // 0.8 es la calidad (0 a 1)
             };
             img.onerror = () => {
             console.error("No se pudo cargar la imagen para convertir a WebP");
             };
         };
+    } else { 
+        mapReady = true; 
+        formObject.mapSrc = ''
     }
 }
 
 formCrear.addEventListener('submit', async(event) => {
     // mostrarToasts()
-    const toastLiveExample = document.getElementById('liveToast')
-    toastLiveExample.classList.add('loading')
-    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-    toastBootstrap.show()
+    // const toastLiveExample = document.getElementById('liveToast')
+    // toastLiveExample.classList.add('loading')
+    // const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+    // toastBootstrap.show()
     
     event.preventDefault()
     const formData = new FormData(event.target)
@@ -475,9 +543,9 @@ formCrear.addEventListener('submit', async(event) => {
     await usarFormObject(formObject)
     
     vaciarInput()
-    toastLiveExample.classList.add('ready')
+    // toastLiveExample.classList.add('ready')
     // toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-    toastBootstrap.show()
+    // toastBootstrap.show()
 })
 
 // function mostrarToasts(){
