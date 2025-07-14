@@ -1,19 +1,3 @@
-//dividir en secciones según el agente (con un boton de mostrar todo)
-//objetivo: que queden todas las cards enumeradas y divididas por agente
-//1. recorrer cards segun su agente
-//2. agregarlas en el momento a un nuevo container para el agente
-//filtros:
-//el boton de basura tiene que vaciar los inputs
-// si un input está vacío y haces submit, deberia estar como por default
-function capitalizeFirstLetter(val) {
-    return String(val).charAt(0).toUpperCase() + String(val).slice(1)
-}
-function uncapitalize(str) {
-    return str.charAt(0).toLowerCase() + str.slice(1)
-}
-// JSON.stringify(dataEnJSON) --> Devuelve un string
-// JSON.parse(string) --> Devuelve un JSON
-//mis elementos:
 const maxContainer = document.getElementById("maxContainer")
 const inputDivision = document.getElementById('order-input-form-hb')
 const inputAutor = document.getElementById('autor-input-form-hb')
@@ -24,6 +8,55 @@ const inputComp = document.getElementById('comp-input-form-hb')
 const formHb = document.getElementById('form-hb')
 const basura = document.getElementById('basura')
 
+function capitalizeFirstLetter(val) {
+    return String(val).charAt(0).toUpperCase() + String(val).slice(1)
+}
+function uncapitalize(str) {
+    return str.charAt(0).toLowerCase() + str.slice(1)
+}
+function mostrarToast(msg, status) {
+    const toastElement = document.getElementById('toast-hb')
+    let toast = bootstrap.Toast.getOrCreateInstance(toastElement, {
+        autohide: false
+    })
+    toastElement.classList.remove('ok', 'error', 'loading')
+    toastElement.classList.add(status)
+    if (status === 'loading') spinner.style.display = 'block'
+    else spinner.style.display = 'none'
+    toastElement.querySelector('.toast-body').innerHTML = msg
+    toast.show()
+
+    if(status !== 'loading'){
+        let isHovered = false
+        let leaveTimeoutId = null
+        function handleMouseEnter() {
+            isHovered = true
+            if (leaveTimeoutId) {
+                clearTimeout(leaveTimeoutId)
+                leaveTimeoutId = null
+            }
+        }
+        function handleMouseLeave() {
+            isHovered = false
+            leaveTimeoutId = setTimeout(() => {
+                toast.hide()
+            }, 2500)
+        }
+        toastElement.addEventListener('mouseenter', handleMouseEnter)
+        toastElement.addEventListener('mouseleave', handleMouseLeave)
+        setTimeout(() => {
+            if (!isHovered) {
+                toast.hide()
+            }
+        }, 2500)
+    }
+
+    toastElement.addEventListener('hidden.bs.toast', function cleanup() {
+        toastElement.removeEventListener('mouseenter', handleMouseEnter)
+        toastElement.removeEventListener('mouseleave', handleMouseLeave)
+        toastElement.removeEventListener('hidden.bs.toast', cleanup)
+    })
+}
 resetHabilidad()
 let allCards = []
 let agentes = []

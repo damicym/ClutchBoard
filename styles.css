@@ -304,7 +304,7 @@ label {
 }
 
 .input-form-crear-title {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     font-style: italic;
     outline: none;
     background: none;
@@ -503,18 +503,45 @@ label {
 h4 {
     color: rgb(39, 62, 71);
 }
-
-.mi-toast.ready{
-    color: var(--color5);
-    background-color: var(--color4);
+.d-flex{
+    display: flex;
+    align-items: center;
+}
+.toast-body{
+    font-weight: 600;
+}
+.mi-toast{
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 460px;
+}
+#spinner-in-toast{
+    color: var(--color4);
+    display: none;
+}
+#spinner-in-submit{
+    color: var(--color2);
+    display: block;
+    margin-right: 10px;
 }
 .mi-toast.loading{
     color: var(--color4);
     background-color: var(--color5);
 }
+.mi-toast.loading .toast-body{
+    color: var(--color4);
+}
+.mi-toast.ok{
+    background-color: var(--color4);
+}
+.mi-toast.ok .toast-body{
+    color: var(--color5);
+}
 .mi-toast.error{
-    color: var(--color2);
     background-color: var(--color1);
+}
+.mi-toast.error .toast-body{
+    color: var(--color2);
 }
 
 .mi-button {

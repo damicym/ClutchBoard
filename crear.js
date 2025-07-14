@@ -2,23 +2,75 @@
 const selectHabilidad = document.getElementById('habilidad')
 const povPreview = document.getElementById('pov-preview')
 const mapPreview = document.getElementById('map-preview')
-const inputHabilidad = document.getElementById('habilidad') //asas
+// const inputHabilidad = document.getElementById('habilidad')
 const agenteSelect = document.getElementById('agente-select')
 const formCrear = document.getElementById('form-crear')
 const inputPov = document.getElementById('input-pov')
 const inputMap = document.getElementById('input-map')
-const povMenu = document.getElementById('pov-menu');
-const mapMenu = document.getElementById('map-menu');
+const povMenu = document.getElementById('pov-menu')
+const mapMenu = document.getElementById('map-menu')
 const pegarPov = document.getElementById('pegar-pov')
 const pegarMap = document.getElementById('pegar-map')
 const eliminarPovButton = document.getElementById('eliminar-pov-button')
 const eliminarMapButton = document.getElementById('eliminar-map-button')
 const astBeforeTitle = document.getElementById('ast-before-title')
+const spinner = document.getElementById('spinner-in-toast')
+const spinnerInSubmit = document.getElementById('spinner-in-submit')
+const submitBtn = document.getElementById('submitBtn')
+const inputTitle = document.getElementById('title')
+const inputDesc = document.getElementById('input-desc')
+const inputNombre = document.getElementById('nombre')
+const selectMapa = document.getElementById('select-mapa')
+const subirArchivoBtn = document.getElementById('subir-archivo-btn')
 
 let povFilePegada = null;
 let mapFilePegada = null;
 let prevPovObjectURL = null;
 let prevMapObjectURL = null;
+
+function mostrarToast(msg, status) {
+    const toastElement = document.getElementById('liveToast')
+    let toast = bootstrap.Toast.getOrCreateInstance(toastElement, {
+        autohide: false
+    })
+    toastElement.classList.remove('ok', 'error', 'loading')
+    toastElement.classList.add(status)
+    if (status === 'loading') spinner.style.display = 'block'
+    else spinner.style.display = 'none'
+    toastElement.querySelector('.toast-body').innerHTML = msg
+    toast.show()
+
+    if(status !== 'loading'){
+        let isHovered = false
+        let leaveTimeoutId = null
+        function handleMouseEnter() {
+            isHovered = true
+            if (leaveTimeoutId) {
+                clearTimeout(leaveTimeoutId)
+                leaveTimeoutId = null
+            }
+        }
+        function handleMouseLeave() {
+            isHovered = false
+            leaveTimeoutId = setTimeout(() => {
+                toast.hide()
+            }, 2500)
+        }
+        toastElement.addEventListener('mouseenter', handleMouseEnter)
+        toastElement.addEventListener('mouseleave', handleMouseLeave)
+        setTimeout(() => {
+            if (!isHovered) {
+                toast.hide()
+            }
+        }, 2500)
+    }
+
+    toastElement.addEventListener('hidden.bs.toast', function cleanup() {
+        toastElement.removeEventListener('mouseenter', handleMouseEnter)
+        toastElement.removeEventListener('mouseleave', handleMouseLeave)
+        toastElement.removeEventListener('hidden.bs.toast', cleanup)
+    })
+}
 
 // ----------input de imgs y previews-------------
 // que se haga con entre y espacio (hay q ponerle tabindex 0 a los html)
@@ -71,6 +123,8 @@ function clickInputPov() {
 povPreview.addEventListener('click', e => {
   povPreview.classList.add('preview-activo');
   mapPreview.classList.remove('preview-activo');
+  if(povFilePegada || inputPov.value != "") eliminarPovButton.removeAttribute('disabled', '')
+    else eliminarPovButton.setAttribute('disabled', '')
   mostrarMenu(povMenu, mapMenu, e);
 });
 eliminarMapButton.addEventListener('click', () => {
@@ -83,6 +137,8 @@ povPreview.addEventListener('contextmenu', e => {
   e.preventDefault();
   povPreview.classList.add('preview-activo');
   mapPreview.classList.remove('preview-activo');
+  if(povFilePegada || inputPov.value != "") eliminarPovButton.removeAttribute('disabled', '')
+    else eliminarPovButton.setAttribute('disabled', '')
   mostrarMenu(povMenu, mapMenu, e);
 });
 function clickInputMap() {
@@ -91,13 +147,17 @@ function clickInputMap() {
 mapPreview.addEventListener('click', e => {
   mapPreview.classList.add('preview-activo');
   povPreview.classList.remove('preview-activo');
+  if(mapFilePegada || inputMap.value != "") eliminarMapButton.removeAttribute('disabled', '')
+    else eliminarMapButton.setAttribute('disabled', '')
   mostrarMenu(mapMenu, povMenu, e);
 });
 mapPreview.addEventListener('contextmenu', e => {
-  e.preventDefault();
-  mapPreview.classList.add('preview-activo');
-  povPreview.classList.remove('preview-activo');
-  mostrarMenu(mapMenu, povMenu, e);
+    e.preventDefault();
+    mapPreview.classList.add('preview-activo');
+    povPreview.classList.remove('preview-activo');
+    if(mapFilePegada || inputMap.value != "") eliminarMapButton.removeAttribute('disabled', '')
+        else eliminarMapButton.setAttribute('disabled', '')
+    mostrarMenu(mapMenu, povMenu, e);
 });
 async function mostrarMenu(menuPrincipal, menuSecundario, e) {
     menuPrincipal.style.left = `${e.clientX}px`;
@@ -110,24 +170,25 @@ async function mostrarMenu(menuPrincipal, menuSecundario, e) {
     const item = items[0];
     for (const type of item.types) {
         if (type.startsWith('image/')) {
-            habilitarButton(pegarButtonTarget)
+            desHabilitarPegarBtn(pegarButtonTarget, true)
         return;
         }
     }
-        deshabilitarButton(pegarButtonTarget)
+        desHabilitarPegarBtn(pegarButtonTarget, false)
     } else {
-        deshabilitarButton(pegarButtonTarget)
+        desHabilitarPegarBtn(pegarButtonTarget, false)
     }
 }
-function deshabilitarButton(button){
-    button.setAttribute('disabled', '')
-    button.innerHTML = `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-off"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5.575 5.597a2 2 0 0 0 -.575 1.403v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2m0 -4v-8a2 2 0 0 0 -2 -2h-2" /><path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 1 1 0 4h-2" /><path d="M3 3l18 18" /></svg>
+function desHabilitarPegarBtn(button, enabled){
+    if(enabled){
+        button.removeAttribute('disabled')
+        button.innerHTML = ` <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>
         Pegar de portapapeles`
-}
-function habilitarButton(button){
-    button.removeAttribute('disabled')
-    button.innerHTML = ` <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>
+    }else{
+        button.setAttribute('disabled', '')
+        button.innerHTML = `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-off"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5.575 5.597a2 2 0 0 0 -.575 1.403v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2m0 -4v-8a2 2 0 0 0 -2 -2h-2" /><path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 1 1 0 4h-2" /><path d="M3 3l18 18" /></svg>
         Pegar de portapapeles`
+    }   
 }
 
 
@@ -156,9 +217,9 @@ pegarPov.addEventListener('click', async () => {
         return;
         }
     }
-    alert('No se encontró imagen en el portapapeles.');
+    mostrarToast('Error: No se encontró imagen en el portapapeles', 'error')
     } else {
-    alert('El portapapeles está vacío.');
+        mostrarToast('Error: El portapapeles está vacío', 'error')
     }
     povMenu.style.display = 'none';
     povPreview.classList.remove('preview-activo');
@@ -178,9 +239,9 @@ pegarMap.addEventListener('click', async () => {
         return;
         }
     }
-    alert('No se encontró imagen en el portapapeles.');
+    mostrarToast('Error: No se encontró imagen en el portapapeles', 'error')
     } else {
-    alert('El portapapeles está vacío.');
+    mostrarToast('Error: El portapapeles está vacío', 'error')
     }
     mapMenu.style.display = 'none';
     mapPreview.classList.remove('preview-activo');
@@ -194,16 +255,16 @@ inputPov.addEventListener('change', event => {
     generarPovPreview(povFile)
 })
 function generarPovPreview(povFile) {
-    const maxSizeMB = 25;
+    const maxSizeMB = 15;
 
     if (povFile) {
         if(!povFile.type.startsWith('image/')){
-            alert('Solo se pueden subir imágenes.');
+            mostrarToast('Error: Solo se pueden subir imágenes', 'error')
             resetPovNPreview()
         }
         else{
             if(povFile.size > maxSizeMB * 1024 * 1024){
-                alert(`La imagen debe pesar menos de ${maxSizeMB}MB).`);
+                mostrarToast(`Error: La imagen debe pesar menos de ${maxSizeMB}MB`, 'error')
                 resetPovNPreview()
             }else{
                 if (prevPovObjectURL) {
@@ -227,15 +288,15 @@ inputMap.addEventListener('change', event => {
     generarMapPreview(mapFile)
 })
 function generarMapPreview(mapFile){
-    const maxSizeMB = 25;
+    const maxSizeMB = 15;
 
     if (mapFile) {
         if(!mapFile.type.startsWith('image/')){
-            alert('Solo se pueden subir imágenes.');
+            mostrarToast('Error: Solo se pueden subir imágenes', 'error')
             resetMapNPreview()
         }else{
             if(mapFile.size > maxSizeMB * 1024 * 1024){
-            alert(`La imagen debe pesar menos de ${maxSizeMB}MB).`);
+            mostrarToast(`Error: La imagen debe pesar menos de ${maxSizeMB}MB`, 'error')
             resetMapNPreview()
             }else{
                 if (prevMapObjectURL) {
@@ -307,37 +368,37 @@ agenteSelect.addEventListener('change', event => {
     const indice = agentes.findIndex(obj => obj.nombre === agenteSeleccionado)
     const agente = agentes[indice]
 
-
     selectHabilidad.innerHTML = ""
-
     selectHabilidad.insertAdjacentHTML('beforeend', '<option value="">Elige una habilidad</option>')
-    let opcion1 = `<option value="${agente.habilidades.h1}">${capitalizeFirstLetter(agente.habilidades.h1)}</option>`
-    selectHabilidad.insertAdjacentHTML('beforeend', opcion1)
+    if(agente){
+        let opcion1 = `<option value="${agente.habilidades.h1}">${capitalizeFirstLetter(agente.habilidades.h1)}</option>`
+        selectHabilidad.insertAdjacentHTML('beforeend', opcion1)
 
-    let opcion2 = `<option value="${agente.habilidades.h2}">${capitalizeFirstLetter(agente.habilidades.h2)}</option>`
-    selectHabilidad.insertAdjacentHTML('beforeend', opcion2)
+        let opcion2 = `<option value="${agente.habilidades.h2}">${capitalizeFirstLetter(agente.habilidades.h2)}</option>`
+        selectHabilidad.insertAdjacentHTML('beforeend', opcion2)
 
-    let opcion3 = `<option value="${agente.habilidades.h3}">${capitalizeFirstLetter(agente.habilidades.h3)}</option>`
-    selectHabilidad.insertAdjacentHTML('beforeend', opcion3)
+        let opcion3 = `<option value="${agente.habilidades.h3}">${capitalizeFirstLetter(agente.habilidades.h3)}</option>`
+        selectHabilidad.insertAdjacentHTML('beforeend', opcion3)
 
-    let opcion4 = `<option value="${agente.habilidades.h4}">${capitalizeFirstLetter(agente.habilidades.h4)}</option>`
-    selectHabilidad.insertAdjacentHTML('beforeend', opcion4)
+        let opcion4 = `<option value="${agente.habilidades.h4}">${capitalizeFirstLetter(agente.habilidades.h4)}</option>`
+        selectHabilidad.insertAdjacentHTML('beforeend', opcion4)
 
-    if (agente.habilidades.h5) {
-        let opcion5 = `<option value="${agente.habilidades.h5}">${capitalizeFirstLetter(agente.habilidades.h5)}</option>`
-        selectHabilidad.insertAdjacentHTML('beforeend', opcion5)
+        if (agente.habilidades.h5) {
+            let opcion5 = `<option value="${agente.habilidades.h5}">${capitalizeFirstLetter(agente.habilidades.h5)}</option>`
+            selectHabilidad.insertAdjacentHTML('beforeend', opcion5)
+        }
     }
 })
 
 
 agenteSelect.addEventListener('change', event => {
 
-    inputHabilidad.disabled = !event.target.value
-    if (!event.target.value) inputHabilidad.value = ""
+    selectHabilidad.disabled = !event.target.value
+    if (!event.target.value) selectHabilidad.value = ""
 })
 function resetHabilidad() {
-    inputHabilidad.disabled = true
-    inputHabilidad.value = ""
+    selectHabilidad.disabled = true
+    selectHabilidad.value = ""
 }
 function vaciarInput() {
     formCrear.reset()
@@ -348,93 +409,25 @@ function vaciarInput() {
 
 // povReady, mapReady, 
 // if(povReady && mapReady){}
-async function postCardSiImgListas(nuevaCard){
-        fetch('http://localhost:3000/cards', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(nuevaCard)
+
+async function postCard(nuevaCard){
+    try{
+        const response = await fetch('http://localhost:3000/cards', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(nuevaCard)
         })
-          .then(response => response.json())
-          .then(data => {
-            console.log('Card guardada:', data);
-            return '¡Artículo publicado exitosamente!'
-        })
-        .catch(error => {
-            console.error('Error al guardar la card:', error)
-            return 'Se produjo un error al intentar publicar tu artículo'
-        });
+        const data = await response.json()
+        if(data.error) {
+            console.error(data.error)
+            return false
+        } else console.log('Card guardada:', data);
+        return true
+    } catch(err){
+        console.error('Error al guardar la card:', err)
+        return false
+    }
 }
-
-// async function usarFormObject(formObject) {
-//     const fechaHoy = new Date();
-//     formObject.fecha = fechaHoy.toISOString();
-//     const povFileFinal = povFilePegada || formObject.povSrc;
-//     const mapFileFinal = mapFilePegada || formObject.mapSrc;
-
-//     if (povFileFinal instanceof Blob && povFileFinal.size > 0) {
-//         try {
-//             formObject.povSrc = await convertirAWebP(povFileFinal);
-//         } catch (error) {
-//             console.error("Error al convertir POV:", error);
-//             formObject.povSrc = '';
-//         }
-//     } else if (typeof povFileFinal === 'string' && povFileFinal.trim() !== '') {
-//         formObject.povSrc = povFileFinal;
-//     } else {
-//         formObject.povSrc = '';
-//     }
-
-//     if (mapFileFinal instanceof Blob && mapFileFinal.size > 0) {
-//         try {
-//             formObject.mapSrc = await convertirAWebP(mapFileFinal);
-//         } catch (error) {
-//             console.error("Error al convertir MAP:", error);
-//             formObject.mapSrc = '';
-//         }
-//     } else if (typeof mapFileFinal === 'string' && mapFileFinal.trim() !== '') {
-//         formObject.mapSrc = mapFileFinal;
-//     } else {
-//         formObject.mapSrc = '';
-//     }
-
-//     // Enviar card
-//     console.log(formObject)
-//     postCardSiImgListas(formObject);
-// }
-
-
-// function convertirAWebP(file) {
-//     return new Promise((resolve, reject) => {
-//         const reader = new FileReader();
-//         reader.readAsDataURL(file);
-
-//         reader.onload = () => {
-//             const img = new Image();
-//             img.src = reader.result;
-
-//             img.onload = () => {
-//                 const canvas = document.createElement('canvas');
-//                 const ctx = canvas.getContext('2d');
-//                 canvas.width = img.width;
-//                 canvas.height = img.height;
-//                 ctx.drawImage(img, 0, 0);
-
-//                 canvas.toBlob((blob) => {
-//                     const webpReader = new FileReader();
-//                     webpReader.readAsDataURL(blob);
-//                     webpReader.onload = () => {
-//                         resolve(webpReader.result);
-//                     };
-//                     webpReader.onerror = reject;
-//                 }, 'image/webp', 0.8);
-//             };
-
-//             img.onerror = reject;
-//         };
-
-//         reader.onerror = reject;
-//     });
-// }
 
 function convertirAWebP(file) {
     return new Promise((resolve, reject) => {
@@ -459,7 +452,7 @@ function convertirAWebP(file) {
                             resolve(webpReader.result);
                         };
                         webpReader.onerror = reject;
-                    }, 'image/webp', 0.8);
+                    }, 'image/webp', 0.7);
                 };
 
                 img.onerror = reject;
@@ -483,29 +476,56 @@ async function usarFormObject(formObject){
     const mapFileFinal = mapFilePegada || formObject.mapSrc;
     formObject.mapSrc = await convertirAWebP(mapFileFinal)
 
-    return postCardSiImgListas(formObject)
+    return postCard(formObject)
 }
 
-// cambiarle el msg segun la clase con innerhtml, agregarle icono de cargando al de cargando
-formCrear.addEventListener('submit', async(event) => {
-    // mostrarToasts()
-    let toastLiveExample = document.getElementById('liveToast')
-    toastLiveExample.classList.add('loading')
-    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-    toastBootstrap.show()
+function desHabilitarInputs(enabled){
+    const formInputs = [povPreview, mapPreview, submitBtn, agenteSelect, selectHabilidad, selectMapa, inputNombre, inputDesc, inputTitle]
     
+    if(enabled){
+        formInputs.forEach(element => {
+            // element.removeAttribute('disabled')
+            // element.style.opacity = '1'
+            submitBtn.removeAttribute('disabled', '')
+            submitBtn.style.boxShadow = '0px 0px 10px var(--color2)'
+            element.style.pointerEvents = 'auto'
+        });
+    } else{
+        formInputs.forEach(element => {
+            // element.setAttribute('disabled', '')
+            selectHabilidad.setAttribute('disabled', '')
+            submitBtn.setAttribute('disabled', '')
+            submitBtn.style.boxShadow = 'none'
+            // element.style.opacity = '0,5'
+            element.style.pointerEvents = 'none'
+        });
+    }
+}
+formCrear.addEventListener('submit', async(event) => {
     event.preventDefault()
+    desHabilitarInputs(false)
+    submitBtn.innerHTML = `<div class="spinner-border" role="status" id="spinner-in-submit">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            Cargando...`
+   
+    // mostrarToast('Cargando...', 'loading')
     const formData = new FormData(event.target)
     const formObject = Object.fromEntries(formData.entries())
-    const mensaje = await usarFormObject(formObject)
-    
-    vaciarInput()
-    toastLiveExample.classList.remove('loading')
-    toastLiveExample.classList.add('ready')
-    toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-    toastBootstrap.show()
-})
 
-// function mostrarToasts(){
-// }
+    let resultado = false
+    resultado = await usarFormObject(formObject)
+    vaciarInput()
+
+    if (resultado) {
+        mostrarToast(`¡Artículo publicado exitosamente en <a class="mi-link" href="habilidades.html">Habilidades</a>!`, 'ok')
+    } else {
+        mostrarToast('Se produjo un error al intentar publicar el artículo', 'error')
+    }
+    desHabilitarInputs(true)
+    submitBtn.innerHTML = 'Publicar'
+});
+
+
+
 

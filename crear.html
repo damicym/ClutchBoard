@@ -48,14 +48,14 @@
             </div>
             <div>
                 <!-- este asterisco es usado para ajustar el focus despues de subir una img: -->
-                <span class="ast" id="ast-before-title" tabindex="0" style="outline: none;"><b>*</b></span>
+                <span class="ast" id="ast-before-title" tabindex="0" style="outline: none; user-select: none;"><b>*</b></span>
                 <input autocomplete="off" name="titleText" id="title" class="input-form-crear-title" type="text"
                     placeholder="Título" required>
             </div>
             <textarea name="desc" autocomplete="off" class="input-form-crear-desc" type="text" rows="7"
-                placeholder="Descripción (para qué sirve, cuándo usarla, con qué combearla, qué hacer después de usarla)"></textarea>
+                placeholder="Descripción (para qué sirve, cuándo usarla, con qué combearla, qué hacer después de usarla)" id="input-desc"></textarea>
             <div style="margin-top: auto;" class="form-crear-firma">
-                <span class="ast"><b>*</b></span>
+                <span class="ast"><b style="user-select: none;">*</b></span>
                 <input autocomplete="off" id="nombre" name="nombre" class="input-form-crear-name" type="text"
                     placeholder="Tu nombre" required>
                 <span name="fecha" class="form-crear-fecha">• <span id="fecha-hoy"></span></span>
@@ -66,7 +66,7 @@
             <h4 class="form-crar-card-2-title">Última información</h4>
             <div>
                 <label>Mapa</label>
-                <select value="Mapa" name="mapa">
+                <select value="Mapa" name="mapa" id="select-mapa">
                     <option value="">Elige un mapa</option>
                     <option value="abyss">Abyss</option>
                     <option value="ascent">Ascent</option>
@@ -82,7 +82,7 @@
                 </select>
             </div>
             <div>
-                <span class="ast" style="left: -2.5px; font-weight: bold;"><b>*</b></span>
+                <span class="ast" style="left: -2.5px; font-weight: bold;"><b style="user-select: none;">*</b></span>
                 <label>Agente</label>
                 <select id="agente-select" name="agente" required>
                     <option value="">Elige un agente</option>
@@ -94,7 +94,9 @@
                     <option value="">Elige una habilidad</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-light">Publicar</button>
+            <button type="submit" class="btn btn-light" id="submitBtn" style="display: flex; align-items: center; justify-content: center;">
+                Publicar
+            </button>
         </div>
     </form>
 
@@ -102,6 +104,9 @@
         <div id="liveToast" class="toast align-items-center border-0 mi-toast" role="alert" aria-live="assertive"
             aria-atomic="true" data-bs-delay="3000">
             <div class="d-flex">
+                    <div class="spinner-border" role="status" id="spinner-in-toast">
+                        <span class="visually-hidden"></span>
+                    </div>
                 <div class="toast-body">
                     <!-- mensaje -->
                 </div>
@@ -125,7 +130,7 @@
         </button>
     </div>
     <div id="map-menu" class="uploadMenu" role="menu" tabindex="-1">
-        <button type="button" onclick="clickInputMap()" role="menuitem" tabindex="-1">
+        <button type="button" onclick="clickInputMap()" role="menuitem" tabindex="-1" id="subir-archivo-btn">
             <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-upload"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 9l5 -5l5 5" /><path d="M12 4l0 12" /></svg>
             Subir archivo
         </button>
