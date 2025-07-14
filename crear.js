@@ -271,20 +271,19 @@ function capitalizeFirstLetter(val) {
 }
 var agentes = {}
 
-const mostrarFecha = () => {
-    const opcionesfecha = {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-    }
-    const fechaIntervaloSeg = setInterval(mostrarFecha, 1000)
-    // fechaIntervaloMin = setInterval(mostrarFecha, 60000)
+const opcionesfecha = {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+}
+const mostrarFecha = () => {    
     const fechaHoy = new Date().toLocaleString('es-ES', opcionesfecha).replace(',', ' •')
     document.getElementById('fecha-hoy').innerHTML = fechaHoy
 }
+const fechaIntervaloSeg = setInterval(mostrarFecha, 59000)
 mostrarFecha()
 
 fetch('data/agentes.json')
