@@ -505,12 +505,15 @@ h4 {
 }
 
 .mi-toast.ready{
+    color: var(--color5);
     background-color: var(--color4);
 }
 .mi-toast.loading{
+    color: var(--color4);
     background-color: var(--color5);
 }
 .mi-toast.error{
+    color: var(--color2);
     background-color: var(--color1);
 }
 

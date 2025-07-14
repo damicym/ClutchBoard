@@ -346,8 +346,9 @@ function vaciarInput() {
     resetHabilidad()
 }
 
-function postCardSiImgListas(povReady, mapReady, nuevaCard){
-    if(povReady && mapReady){
+// povReady, mapReady, 
+// if(povReady && mapReady){}
+async function postCardSiImgListas(nuevaCard){
         fetch('http://localhost:3000/cards', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -356,9 +357,12 @@ function postCardSiImgListas(povReady, mapReady, nuevaCard){
           .then(response => response.json())
           .then(data => {
             console.log('Card guardada:', data);
+            return '¡Artículo publicado exitosamente!'
         })
-        .catch(error => console.error('Error al guardar la card:', error));
-    }
+        .catch(error => {
+            console.error('Error al guardar la card:', error)
+            return 'Se produjo un error al intentar publicar tu artículo'
+        });
 }
 
 // async function usarFormObject(formObject) {
@@ -432,122 +436,76 @@ function postCardSiImgListas(povReady, mapReady, nuevaCard){
 //     });
 // }
 
+function convertirAWebP(file) {
+    return new Promise((resolve, reject) => {
+        if (file.size > 0){
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                const img = new Image();
+                img.src = reader.result;
+
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+
+                    canvas.toBlob((blob) => {
+                        const webpReader = new FileReader();
+                        webpReader.readAsDataURL(blob);
+                        webpReader.onload = () => {
+                            resolve(webpReader.result);
+                        };
+                        webpReader.onerror = reject;
+                    }, 'image/webp', 0.8);
+                };
+
+                img.onerror = reject;
+            };
+
+            reader.onerror = reject;
+        } else { resolve('')}
+       
+    });
+}
+
 async function usarFormObject(formObject){
-    let povReady = false
-    let mapReady = false
+    // let povReady = false
+    // let mapReady = false
     const fechaHoy = new Date()
     formObject.fecha = fechaHoy.toISOString()
 
     const povFileFinal = povFilePegada || formObject.povSrc;
-    if (povFileFinal.size > 0) {
-        let reader = new FileReader();
-        reader.readAsDataURL(povFileFinal);
-        reader.onload = () => {
-            const img = new Image();
-            img.src = reader.result;
-
-            img.onload = () => {
-                // Crear un canvas para redibujar la imagen
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                
-                // Establecer las dimensiones del canvas igual a las de la imagen
-                canvas.width = img.width;
-                canvas.height = img.height;
-                
-                // Dibujar la imagen en el canvas
-                ctx.drawImage(img, 0, 0);
-                
-                // Convertir el canvas a WebP (calidad: 0.8, puedes ajustarlo)
-                canvas.toBlob((blob) => {
-                    const webpReader = new FileReader();
-                    webpReader.readAsDataURL(blob);
-                    webpReader.onload = () => {
-                        formObject.povSrc = webpReader.result; // Ahora es WebP en base64
-                        povReady = true;
-                        // URL.revokeObjectURL(img.src)
-                        // img.src = ''
-                        postCardSiImgListas(povReady, mapReady, formObject);
-                    };
-                    // webpReader.onloadend = () => {
-                    //     webpReader = null;
-                    // };
-                }, 'image/webp', 0.8); // 0.8 es la calidad (0 a 1)
-            };
-            img.onerror = () => {
-            console.error("No se pudo cargar la imagen para convertir a WebP");
-            };
-        };
-    } else { 
-        povReady = true; 
-        formObject.povSrc = ''
-    }
+    formObject.povSrc = await convertirAWebP(povFileFinal)
 
     const mapFileFinal = mapFilePegada || formObject.mapSrc;
-    if (mapFileFinal.size > 0) {
-        let reader = new FileReader();
-        reader.readAsDataURL(mapFileFinal);
-        reader.onload = () => {
-            const img = new Image();
-            img.src = reader.result;
+    formObject.mapSrc = await convertirAWebP(mapFileFinal)
 
-            img.onload = () => {
-                // Crear un canvas para redibujar la imagen
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                
-                // Establecer las dimensiones del canvas igual a las de la imagen
-                canvas.width = img.width;
-                canvas.height = img.height;
-                
-                // Dibujar la imagen en el canvas
-                ctx.drawImage(img, 0, 0);
-                
-                // Convertir el canvas a WebP (calidad: 0.8, puedes ajustarlo)
-                canvas.toBlob((blob) => {
-                    const webpReader = new FileReader();
-                    webpReader.readAsDataURL(blob);
-                    webpReader.onload = () => {
-                        formObject.mapSrc = webpReader.result; // Ahora es WebP en base64
-                        mapReady = true;
-                        // URL.revokeObjectURL(img.src)
-                        // img.src = ''
-                        postCardSiImgListas(povReady, mapReady, formObject);
-                    };
-                    // webpReader.onloadend = () => {
-                    //     webpReader = null;
-                    // };
-                }, 'image/webp', 0.8); // 0.8 es la calidad (0 a 1)
-            };
-            img.onerror = () => {
-            console.error("No se pudo cargar la imagen para convertir a WebP");
-            };
-        };
-    } else { 
-        mapReady = true; 
-        formObject.mapSrc = ''
-    }
+    return postCardSiImgListas(formObject)
 }
 
+// cambiarle el msg segun la clase con innerhtml, agregarle icono de cargando al de cargando
 formCrear.addEventListener('submit', async(event) => {
     // mostrarToasts()
-    // const toastLiveExample = document.getElementById('liveToast')
-    // toastLiveExample.classList.add('loading')
-    // const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-    // toastBootstrap.show()
+    let toastLiveExample = document.getElementById('liveToast')
+    toastLiveExample.classList.add('loading')
+    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+    toastBootstrap.show()
     
     event.preventDefault()
     const formData = new FormData(event.target)
     const formObject = Object.fromEntries(formData.entries())
-    await usarFormObject(formObject)
+    const mensaje = await usarFormObject(formObject)
     
     vaciarInput()
-    // toastLiveExample.classList.add('ready')
-    // toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-    // toastBootstrap.show()
+    toastLiveExample.classList.remove('loading')
+    toastLiveExample.classList.add('ready')
+    toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+    toastBootstrap.show()
 })
 
 // function mostrarToasts(){
-    
 // }
 
