@@ -123,7 +123,7 @@ function clickInputPov() {
 povPreview.addEventListener('click', e => {
   povPreview.classList.add('preview-activo');
   mapPreview.classList.remove('preview-activo');
-  if(povFilePegada || inputPov.value != "") eliminarPovButton.removeAttribute('disabled', '')
+  if(povFilePegada || inputPov.value != "") eliminarPovButton.removeAttribute('disabled')
     else eliminarPovButton.setAttribute('disabled', '')
   mostrarMenu(povMenu, mapMenu, e);
 });
@@ -137,7 +137,7 @@ povPreview.addEventListener('contextmenu', e => {
   e.preventDefault();
   povPreview.classList.add('preview-activo');
   mapPreview.classList.remove('preview-activo');
-  if(povFilePegada || inputPov.value != "") eliminarPovButton.removeAttribute('disabled', '')
+  if(povFilePegada || inputPov.value != "") eliminarPovButton.removeAttribute('disabled')
     else eliminarPovButton.setAttribute('disabled', '')
   mostrarMenu(povMenu, mapMenu, e);
 });
@@ -147,7 +147,7 @@ function clickInputMap() {
 mapPreview.addEventListener('click', e => {
   mapPreview.classList.add('preview-activo');
   povPreview.classList.remove('preview-activo');
-  if(mapFilePegada || inputMap.value != "") eliminarMapButton.removeAttribute('disabled', '')
+  if(mapFilePegada || inputMap.value != "") eliminarMapButton.removeAttribute('disabled')
     else eliminarMapButton.setAttribute('disabled', '')
   mostrarMenu(mapMenu, povMenu, e);
 });
@@ -155,7 +155,7 @@ mapPreview.addEventListener('contextmenu', e => {
     e.preventDefault();
     mapPreview.classList.add('preview-activo');
     povPreview.classList.remove('preview-activo');
-    if(mapFilePegada || inputMap.value != "") eliminarMapButton.removeAttribute('disabled', '')
+    if(mapFilePegada || inputMap.value != "") eliminarMapButton.removeAttribute('disabled')
         else eliminarMapButton.setAttribute('disabled', '')
     mostrarMenu(mapMenu, povMenu, e);
 });
@@ -486,7 +486,7 @@ function desHabilitarInputs(enabled){
         formInputs.forEach(element => {
             // element.removeAttribute('disabled')
             // element.style.opacity = '1'
-            submitBtn.removeAttribute('disabled', '')
+            submitBtn.removeAttribute('disabled')
             submitBtn.style.boxShadow = '0px 0px 10px var(--color2)'
             element.style.pointerEvents = 'auto'
         });
