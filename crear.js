@@ -28,7 +28,7 @@ let mapFilePegada = null;
 let prevPovObjectURL = null;
 let prevMapObjectURL = null;
 
-function mostrarToast(msg, status) {
+function mostrarToast(status, msg) {
     const toastElement = document.getElementById('liveToast')
     let toast = bootstrap.Toast.getOrCreateInstance(toastElement, {
         autohide: false
@@ -54,7 +54,7 @@ function mostrarToast(msg, status) {
             isHovered = false
             leaveTimeoutId = setTimeout(() => {
                 toast.hide()
-            }, 2500)
+            }, 3000)
         }
         toastElement.addEventListener('mouseenter', handleMouseEnter)
         toastElement.addEventListener('mouseleave', handleMouseLeave)
@@ -62,7 +62,7 @@ function mostrarToast(msg, status) {
             if (!isHovered) {
                 toast.hide()
             }
-        }, 2500)
+        }, 3000)
     }
 
     toastElement.addEventListener('hidden.bs.toast', function cleanup() {
@@ -217,9 +217,9 @@ pegarPov.addEventListener('click', async () => {
         return;
         }
     }
-    mostrarToast('Error: No se encontró imagen en el portapapeles', 'error')
+    mostrarToast('error', 'Error: No se encontró imagen en el portapapeles')
     } else {
-        mostrarToast('Error: El portapapeles está vacío', 'error')
+        mostrarToast('error', 'Error: El portapapeles está vacío')
     }
     povMenu.style.display = 'none';
     povPreview.classList.remove('preview-activo');
@@ -239,9 +239,9 @@ pegarMap.addEventListener('click', async () => {
         return;
         }
     }
-    mostrarToast('Error: No se encontró imagen en el portapapeles', 'error')
+    mostrarToast('error', 'Error: No se encontró imagen en el portapapeles')
     } else {
-    mostrarToast('Error: El portapapeles está vacío', 'error')
+    mostrarToast('error', 'Error: El portapapeles está vacío')
     }
     mapMenu.style.display = 'none';
     mapPreview.classList.remove('preview-activo');
@@ -259,12 +259,12 @@ function generarPovPreview(povFile) {
 
     if (povFile) {
         if(!povFile.type.startsWith('image/')){
-            mostrarToast('Error: Solo se pueden subir imágenes', 'error')
+            mostrarToast('error', 'Error: Solo se pueden subir imágenes')
             resetPovNPreview()
         }
         else{
             if(povFile.size > maxSizeMB * 1024 * 1024){
-                mostrarToast(`Error: La imagen debe pesar menos de ${maxSizeMB}MB`, 'error')
+                mostrarToast('error', `Error: La imagen debe pesar menos de ${maxSizeMB}MB`)
                 resetPovNPreview()
             }else{
                 if (prevPovObjectURL) {
@@ -292,11 +292,11 @@ function generarMapPreview(mapFile){
 
     if (mapFile) {
         if(!mapFile.type.startsWith('image/')){
-            mostrarToast('Error: Solo se pueden subir imágenes', 'error')
+            mostrarToast('error', 'Error: Solo se pueden subir imágenes')
             resetMapNPreview()
         }else{
             if(mapFile.size > maxSizeMB * 1024 * 1024){
-            mostrarToast(`Error: La imagen debe pesar menos de ${maxSizeMB}MB`, 'error')
+            mostrarToast('error', `Error: La imagen debe pesar menos de ${maxSizeMB}MB`)
             resetMapNPreview()
             }else{
                 if (prevMapObjectURL) {
@@ -420,12 +420,14 @@ async function postCard(nuevaCard){
         const data = await response.json()
         if(data.error) {
             console.error(data.error)
-            return false
-        } else console.log('Card guardada:', data);
-        return true
+            return [false, data.error]
+        } else {
+            console.log('Card guardada:', data);
+            return [true, `¡Artículo publicado exitosamente en <a class="mi-link" href="habilidades.html">Habilidades</a>!`]
+        }
     } catch(err){
         console.error('Error al guardar la card:', err)
-        return false
+        [false, err?.message || 'No se pudo guardar el artículo']
     }
 }
 
@@ -451,15 +453,15 @@ function convertirAWebP(file) {
                         webpReader.onload = () => {
                             resolve(webpReader.result);
                         };
-                        webpReader.onerror = reject;
+                        webpReader.onerror = () => reject(new Error('Error al leer la imagen convertida a WebP.'))
                     }, 'image/webp', 0.7);
                 };
 
-                img.onerror = reject;
+                img.onerror = () => reject(new Error('Error al cargar la imagen.'))
             };
 
-            reader.onerror = reject;
-        } else { resolve('')}
+            reader.onerror = () => reject(new Error('Error al leer el archivo original.'))
+        } else { resolve('') }
        
     });
 }
@@ -471,10 +473,18 @@ async function usarFormObject(formObject){
     formObject.fecha = fechaHoy.toISOString()
 
     const povFileFinal = povFilePegada || formObject.povSrc;
-    formObject.povSrc = await convertirAWebP(povFileFinal)
+    try {
+        formObject.povSrc = await convertirAWebP(povFileFinal)
+    } catch (err){
+        return [false, 'Error al cargar la imagen POV']
+    }
 
     const mapFileFinal = mapFilePegada || formObject.mapSrc;
-    formObject.mapSrc = await convertirAWebP(mapFileFinal)
+    try {
+        formObject.mapSrc = await convertirAWebP(mapFileFinal)
+    } catch (err){
+        return [false, 'Error al cargar la imagen MAP']
+    }
 
     return postCard(formObject)
 }
@@ -509,19 +519,16 @@ formCrear.addEventListener('submit', async(event) => {
                             </div>
                             Cargando...`
    
-    // mostrarToast('Cargando...', 'loading')
+    // mostrarToast('loading', 'Cargando...')
     const formData = new FormData(event.target)
     const formObject = Object.fromEntries(formData.entries())
 
-    let resultado = false
+    let resultado = [false, 'Se produjo un error al intentar publicar el artículo']
     resultado = await usarFormObject(formObject)
     vaciarInput()
 
-    if (resultado) {
-        mostrarToast(`¡Artículo publicado exitosamente en <a class="mi-link" href="habilidades.html">Habilidades</a>!`, 'ok')
-    } else {
-        mostrarToast('Se produjo un error al intentar publicar el artículo', 'error')
-    }
+    // return [true, `¡Artículo publicado exitosamente en <a class="mi-link" href="habilidades.html">Habilidades</a>!`]
+    mostrarToast(resultado[0] ? 'ok' : 'error', resultado[1])
     desHabilitarInputs(true)
     submitBtn.innerHTML = 'Publicar'
 });

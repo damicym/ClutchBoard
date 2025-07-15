@@ -14,7 +14,7 @@ function capitalizeFirstLetter(val) {
 function uncapitalize(str) {
     return str.charAt(0).toLowerCase() + str.slice(1)
 }
-function mostrarToast(msg, status) {
+function mostrarToast(status, msg) {
     const toastElement = document.getElementById('toast-hb')
     let toast = bootstrap.Toast.getOrCreateInstance(toastElement, {
         autohide: false
