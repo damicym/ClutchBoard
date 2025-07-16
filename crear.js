@@ -23,10 +23,39 @@ const inputNombre = document.getElementById('nombre')
 const selectMapa = document.getElementById('select-mapa')
 const subirArchivoBtn = document.getElementById('subir-archivo-btn')
 
-let povFilePegada = null;
-let mapFilePegada = null;
-let prevPovObjectURL = null;
-let prevMapObjectURL = null;
+let povFilePegada = null
+let mapFilePegada = null
+let prevPovObjectURL = null
+let prevMapObjectURL = null
+let datosImportantesSinImgPegada = false
+// let vacio = true
+
+formCrear.addEventListener('input', () => {
+    const formData = new FormData(formCrear)
+
+    vacio = [...formData.values()].every(valor => {
+    if (typeof valor === 'string') {
+        return !valor.trim()
+    } else if (valor instanceof File) {
+        return valor.size === 0;
+    } else {
+        return false
+    }
+    })
+    // const hayImagenPegada = !!povFilePegada || !!mapFilePegada
+    datosImportantesSinImgPegada = !vacio // || hayImagenPegada
+})
+
+
+window.addEventListener('beforeunload', (e) => {
+    const hayImagenPegada = !!povFilePegada || !!mapFilePegada
+    if (datosImportantesSinImgPegada || hayImagenPegada) {
+        e.preventDefault()
+        e.returnValue = ''
+    }
+})
+
+
 
 function mostrarToast(status, msg) {
     const toastElement = document.getElementById('liveToast')
@@ -76,186 +105,262 @@ function mostrarToast(status, msg) {
 // que se haga con entre y espacio (hay q ponerle tabindex 0 a los html)
 // povPreview.addEventListener('keydown', e => {
 //   if (e.key === 'Enter' || e.key === ' ') {
-//     e.preventDefault(); // Previene scroll si se presiona espacio
-//     povPreview.click();
+//     e.preventDefault() // Previene scroll si se presiona espacio
+//     povPreview.click()
 //   }
-// });
+// })
 // mapPreview.addEventListener('keydown', e => {
 //   if (e.key === 'Enter' || e.key === ' ') {
-//     e.preventDefault(); // Previene scroll si se presiona espacio
+//     e.preventDefault() // Previene scroll si se presiona espacio
 //     mapPreview.click()
 //   }
-// });
+// })
 document.addEventListener('keydown', e => {
     if(e.key === 'Escape'){
-        povMenu.classList.remove('abierto');
-        povPreview.classList.remove('preview-activo');
-        mapMenu.classList.remove('abierto');
-        mapPreview.classList.remove('preview-activo');
+        povMenu.classList.remove('abierto')
+        povPreview.classList.remove('preview-activo')
+        mapMenu.classList.remove('abierto')
+        mapPreview.classList.remove('preview-activo')
     }
-});
+})
 document.addEventListener('click', e => {
-  cerrarUploadMenusSiTocaAfuera(e);
-});
+    cerrarUploadMenusSiTocaAfuera(e)
+})
 document.addEventListener('contextmenu', e => {
-  cerrarUploadMenusSiTocaAfuera(e);
-});
+    cerrarUploadMenusSiTocaAfuera(e)
+})
 eliminarPovButton.addEventListener('click', () => {
     resetPovNPreview()
     povFilePegada = null
-    povPreview.classList.remove('preview-activo');
+    povPreview.classList.remove('preview-activo')
     povMenu.classList.remove('abierto')
-    inputPov.setAttribute('required', '');
+    inputPov.setAttribute('required', '')
 })
 function cerrarUploadMenusSiTocaAfuera(e) {
-  if (!povMenu.contains(e.target) && e.target !== povPreview) {
-    povMenu.classList.remove('abierto');
-    povPreview.classList.remove('preview-activo');
+    if (!povMenu.contains(e.target) && e.target !== povPreview) {
+        povMenu.classList.remove('abierto')
+        povPreview.classList.remove('preview-activo')
   }
-  if (!mapMenu.contains(e.target) && e.target !== mapPreview) {
-    mapMenu.classList.remove('abierto');
-    mapPreview.classList.remove('preview-activo');
+    if (!mapMenu.contains(e.target) && e.target !== mapPreview) {
+        mapMenu.classList.remove('abierto')
+        mapPreview.classList.remove('preview-activo')
   }
 }
 function clickInputPov() {
-  inputPov.click();
+    inputPov.click()
 }
 povPreview.addEventListener('click', e => {
-  povPreview.classList.add('preview-activo');
-  mapPreview.classList.remove('preview-activo');
-  if(povFilePegada || inputPov.value != "") eliminarPovButton.removeAttribute('disabled')
-    else eliminarPovButton.setAttribute('disabled', '')
-  mostrarMenu(povMenu, mapMenu, e);
-});
+    povPreview.classList.add('preview-activo')
+    mapPreview.classList.remove('preview-activo')
+    if(povFilePegada || inputPov.value != "") eliminarPovButton.removeAttribute('disabled')
+        else eliminarPovButton.setAttribute('disabled', '')
+    mostrarMenu(povMenu, mapMenu, e)
+})
 eliminarMapButton.addEventListener('click', () => {
     resetMapNPreview()
     mapFilePegada = null
-    mapPreview.classList.remove('preview-activo');
+    mapPreview.classList.remove('preview-activo')
     mapMenu.classList.remove('abierto')
 })
 povPreview.addEventListener('contextmenu', e => {
-  e.preventDefault();
-  povPreview.classList.add('preview-activo');
-  mapPreview.classList.remove('preview-activo');
-  if(povFilePegada || inputPov.value != "") eliminarPovButton.removeAttribute('disabled')
-    else eliminarPovButton.setAttribute('disabled', '')
-  mostrarMenu(povMenu, mapMenu, e);
-});
+    e.preventDefault()
+    povPreview.classList.add('preview-activo')
+    mapPreview.classList.remove('preview-activo')
+    if(povFilePegada || inputPov.value != "") eliminarPovButton.removeAttribute('disabled')
+        else eliminarPovButton.setAttribute('disabled', '')
+    mostrarMenu(povMenu, mapMenu, e)
+})
 function clickInputMap() {
-  inputMap.click();
+    inputMap.click()
 }
 mapPreview.addEventListener('click', e => {
-  mapPreview.classList.add('preview-activo');
-  povPreview.classList.remove('preview-activo');
-  if(mapFilePegada || inputMap.value != "") eliminarMapButton.removeAttribute('disabled')
-    else eliminarMapButton.setAttribute('disabled', '')
-  mostrarMenu(mapMenu, povMenu, e);
-});
-mapPreview.addEventListener('contextmenu', e => {
-    e.preventDefault();
-    mapPreview.classList.add('preview-activo');
-    povPreview.classList.remove('preview-activo');
+    mapPreview.classList.add('preview-activo')
+    povPreview.classList.remove('preview-activo')
     if(mapFilePegada || inputMap.value != "") eliminarMapButton.removeAttribute('disabled')
         else eliminarMapButton.setAttribute('disabled', '')
-    mostrarMenu(mapMenu, povMenu, e);
-});
+    mostrarMenu(mapMenu, povMenu, e)
+})
+mapPreview.addEventListener('contextmenu', e => {
+    e.preventDefault()
+    mapPreview.classList.add('preview-activo')
+    povPreview.classList.remove('preview-activo')
+    if(mapFilePegada || inputMap.value != "") eliminarMapButton.removeAttribute('disabled')
+        else eliminarMapButton.setAttribute('disabled', '')
+    mostrarMenu(mapMenu, povMenu, e)
+})
+
+// si no tenes permiso, 
+// 1. mostrar el boton con el icono y texto de pedir permiso
+// 2. una vez tocas el boton (de pedir acceso) evaluar portapapeles
+// 3. mostrar el boton según si hay items
+// si sí tenes permiso, 
+// 1. evaluar portapapeles
+// 2. mostrar el boton según si hay items
+
+// si el boton es de permitir acceso, cuando lo tocas
+// 1. evaluarPortapapelesYBtn()
+
+
+function devolverPegarBtn(menu){
+    return menu.querySelectorAll('[id^="pegar-"]')[0]
+}
 async function mostrarMenu(menuPrincipal, menuSecundario, e) {
-    menuPrincipal.style.left = `${e.clientX}px`;
-    menuPrincipal.style.top = `${e.clientY}px`;
-    menuPrincipal.classList.add('abierto');
-    menuSecundario.classList.remove('abierto');
-    const pegarButtonTarget = menuPrincipal.querySelectorAll('[id^="pegar-"]')[0];
-    const items = await navigator.clipboard.read();
-    if (items.length > 0) {
-    const item = items[0];
-    for (const type of item.types) {
-        if (type.startsWith('image/')) {
-            desHabilitarPegarBtn(pegarButtonTarget, true)
-        return;
+    const pegarButtonTarget = devolverPegarBtn(menuPrincipal)
+    const permiso = await navigator.permissions.query({ name: 'clipboard-read' })
+    if(permiso.state === 'granted'){
+        evaluarPortapapelesYBtn(pegarButtonTarget)
+    } else if(permiso.state === 'prompt'){
+        estilarPegarBtnByPermiso(pegarButtonTarget, true)
+    } else{
+        estilarPegarBtnByPermiso(pegarButtonTarget, false)
+    }
+    menuPrincipal.style.left = `${e.clientX}px`
+    menuPrincipal.style.top = `${e.clientY}px`
+    menuPrincipal.classList.add('abierto')
+    menuSecundario.classList.remove('abierto')
+}
+async function evaluarPortapapelesYBtn(btn){
+    if (!navigator.clipboard?.read) {
+        mostrarToast('error', 'Tu navegador no permite acceder al portapapeles')
+        return
+    }
+    try{
+        const items = await navigator.clipboard.read()
+        if (items.length > 0) {
+        const item = items[0]
+        for (const type of item.types) {
+            if (type.startsWith('image/')) {
+                estilarPegarBtnByItems(btn, true)
+            return
+            }
+        }
+            estilarPegarBtnByItems(btn, false)
+        } else {
+            estilarPegarBtnByItems(btn, false)
+        }
+    }catch(err){
+        if (!err.name === 'NotAllowedError'){
+            mostrarToast('error', `No se pudo acceder al portapapeles: ${err.message}`)
         }
     }
-        desHabilitarPegarBtn(pegarButtonTarget, false)
-    } else {
-        desHabilitarPegarBtn(pegarButtonTarget, false)
-    }
+    
 }
-function desHabilitarPegarBtn(button, enabled){
+function estilarPegarBtnByPermiso(button, enabled){
     if(enabled){
+        button.classList.remove('grantedState')
         button.removeAttribute('disabled')
-        button.innerHTML = ` <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>
+        button.innerHTML = `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M10 12l4 4m0 -4l-4 4" /></svg>
+        Permitir acceso a portapapeles`
+    }else{
+        button.classList.remove('grantedState')
+        button.setAttribute('disabled', '')
+        button.innerHTML = `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M10 12l4 4m0 -4l-4 4" /></svg>
+        Acceso a portapapeles denegado`
+    }
+} 
+function estilarPegarBtnByItems(button, enabled){
+    if(enabled){
+        button.classList.add('grantedState')
+        button.removeAttribute('disabled')
+        button.innerHTML = `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>
         Pegar de portapapeles`
     }else{
+        button.classList.remove('grantedState')
         button.setAttribute('disabled', '')
         button.innerHTML = `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-off"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5.575 5.597a2 2 0 0 0 -.575 1.403v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2m0 -4v-8a2 2 0 0 0 -2 -2h-2" /><path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 1 1 0 4h-2" /><path d="M3 3l18 18" /></svg>
         Pegar de portapapeles`
-    }   
+    }
 }
-
-
+pegarPov.addEventListener('click', async () => {
+    if (!navigator.clipboard?.read) {
+        mostrarToast('error', 'Tu navegador no permite acceder al portapapeles')
+        return
+    }
+    const pegarButtonTarget = devolverPegarBtn(povMenu)
+    try{
+        const items = await navigator.clipboard.read()
+        if(pegarButtonTarget.classList.contains('grantedState')){
+            if (items.length > 0) {
+            const item = items[0]
+            for (const type of item.types) {
+                if (type.startsWith('image/')) {
+                povFilePegada = await item.getType(type)
+                povPreview.classList.remove('preview-activo')
+                povMenu.classList.remove('abierto')
+                inputPov.value = ''
+                inputPov.removeAttribute('required')
+                generarPovPreview(povFilePegada)
+                return
+                }
+            }
+            mostrarToast('error', 'Error: No se encontró imagen en el portapapeles')
+            } else {
+                mostrarToast('error', 'Error: El portapapeles está vacío')
+            }
+        } else evaluarPortapapelesYBtn(pegarButtonTarget)
+    } catch(err){
+        if (!err.name === 'NotAllowedError'){
+            mostrarToast('error', `No se pudo acceder al portapapeles: ${err.message}`)
+        }
+    }
+    // povMenu.style.display = 'none'
+    povPreview.classList.remove('preview-activo')
+    povMenu.classList.remove('abierto')
+})
+pegarMap.addEventListener('click', async () => {
+    if (!navigator.clipboard?.read) {
+        mostrarToast('error', 'Tu navegador no permite el uso de portapapeles')
+        return
+    }
+    const pegarButtonTarget = devolverPegarBtn(mapMenu)
+    try{
+        const items = await navigator.clipboard.read()
+        if(pegarButtonTarget.classList.contains('grantedState')){
+            if (items.length > 0) {
+            const item = items[0]
+            for (const type of item.types) {
+                if (type.startsWith('image/')) {
+                mapFilePegada = await item.getType(type)
+                mapPreview.classList.remove('preview-activo')
+                mapMenu.classList.remove('abierto')
+                inputMap.value = ''
+                generarMapPreview(mapFilePegada)
+                return
+                }
+            }
+            mostrarToast('error', 'Error: No se encontró imagen en el portapapeles')
+            } else {
+            mostrarToast('error', 'Error: El portapapeles está vacío')
+            }
+        } else evaluarPortapapelesYBtn(pegarButtonTarget)
+    } catch(err){
+        if (!err.name === 'NotAllowedError'){
+            mostrarToast('error', `No se pudo acceder al portapapeles: ${err.message}`)
+        }
+    }
+    // mapMenu.style.display = 'none'
+    mapPreview.classList.remove('preview-activo')
+    mapMenu.classList.remove('abierto')
+})
 function resetPovNPreview() {
     if (prevPovObjectURL) {
-        URL.revokeObjectURL(prevPovObjectURL);
-        prevPovObjectURL = null;
+        URL.revokeObjectURL(prevPovObjectURL)
+        prevPovObjectURL = null
     }
     inputPov.value = ''
     povPreview.src = "./images/pov-select.png"
     povPreview.style.border = "10px solid #273E47"
     povPreview.style.borderRadius = "10px"
 }
-pegarPov.addEventListener('click', async () => {
-    const items = await navigator.clipboard.read();
-    if (items.length > 0) {
-    const item = items[0];
-    for (const type of item.types) {
-        if (type.startsWith('image/')) {
-        povFilePegada = await item.getType(type);
-        povPreview.classList.remove('preview-activo');
-        povMenu.classList.remove('abierto')
-        inputPov.value = ''
-        inputPov.removeAttribute('required');
-        generarPovPreview(povFilePegada)
-        return;
-        }
-    }
-    mostrarToast('error', 'Error: No se encontró imagen en el portapapeles')
-    } else {
-        mostrarToast('error', 'Error: El portapapeles está vacío')
-    }
-    povMenu.style.display = 'none';
-    povPreview.classList.remove('preview-activo');
-    povMenu.classList.remove('abierto')
-})
-pegarMap.addEventListener('click', async () => {
-    const items = await navigator.clipboard.read();
-    if (items.length > 0) {
-    const item = items[0];
-    for (const type of item.types) {
-        if (type.startsWith('image/')) {
-        mapFilePegada = await item.getType(type);
-        mapPreview.classList.remove('preview-activo');
-        mapMenu.classList.remove('abierto')
-        inputMap.value = ''
-        generarMapPreview(mapFilePegada)
-        return;
-        }
-    }
-    mostrarToast('error', 'Error: No se encontró imagen en el portapapeles')
-    } else {
-    mostrarToast('error', 'Error: El portapapeles está vacío')
-    }
-    mapMenu.style.display = 'none';
-    mapPreview.classList.remove('preview-activo');
-    mapMenu.classList.remove('abierto')
-})
 inputPov.addEventListener('change', event => {
     const povFileInput = event.target
     const povFile = povFileInput.files[0]
-    povFilePegada = null;
-    inputPov.setAttribute('required', '');
+    povFilePegada = null
+    inputPov.setAttribute('required', '')
     generarPovPreview(povFile)
 })
 function generarPovPreview(povFile) {
-    const maxSizeMB = 15;
+    const maxSizeMB = 15
 
     if (povFile) {
         if(!povFile.type.startsWith('image/')){
@@ -268,12 +373,12 @@ function generarPovPreview(povFile) {
                 resetPovNPreview()
             }else{
                 if (prevPovObjectURL) {
-                    URL.revokeObjectURL(prevPovObjectURL);
+                    URL.revokeObjectURL(prevPovObjectURL)
                 }
-                prevPovObjectURL = URL.createObjectURL(povFile);
-                povPreview.style.display = 'inline-block';
-                povPreview.style.border = '0px';
-                povPreview.src = prevPovObjectURL;
+                prevPovObjectURL = URL.createObjectURL(povFile)
+                povPreview.style.display = 'inline-block'
+                povPreview.style.border = '0px'
+                povPreview.src = prevPovObjectURL
                 // povPreview.src = URL.createObjectURL(povFile)
             }
         }
@@ -288,7 +393,7 @@ inputMap.addEventListener('change', event => {
     generarMapPreview(mapFile)
 })
 function generarMapPreview(mapFile){
-    const maxSizeMB = 15;
+    const maxSizeMB = 15
 
     if (mapFile) {
         if(!mapFile.type.startsWith('image/')){
@@ -300,13 +405,13 @@ function generarMapPreview(mapFile){
             resetMapNPreview()
             }else{
                 if (prevMapObjectURL) {
-                    URL.revokeObjectURL(prevMapObjectURL);
+                    URL.revokeObjectURL(prevMapObjectURL)
                 }
-                prevMapObjectURL = URL.createObjectURL(mapFile);
+                prevMapObjectURL = URL.createObjectURL(mapFile)
                 mapPreview.style.display = 'inline-block'
                 mapPreview.style.border = "3px solid rgb(216, 151, 60)"
-                mapPreview.src = prevMapObjectURL;
-                // mapPreview.src = URL.createObjectURL(mapFile);
+                mapPreview.src = prevMapObjectURL
+                // mapPreview.src = URL.createObjectURL(mapFile)
             }
         }
     }
@@ -316,8 +421,8 @@ function generarMapPreview(mapFile){
 
 function resetMapNPreview() {
     if (prevMapObjectURL) {
-        URL.revokeObjectURL(prevMapObjectURL);
-        prevMapObjectURL = null;
+        URL.revokeObjectURL(prevMapObjectURL)
+        prevMapObjectURL = null
     }
 
     inputMap.value = ''
@@ -340,7 +445,7 @@ const opcionesfecha = {
     minute: '2-digit',
     hour12: false
 }
-const mostrarFecha = () => {    
+const mostrarFecha = () => {
     const fechaHoy = new Date().toLocaleString('es-ES', opcionesfecha).replace(',', ' •')
     document.getElementById('fecha-hoy').innerHTML = fechaHoy
 }
@@ -422,7 +527,7 @@ async function postCard(nuevaCard){
             console.error(data.error)
             return [false, data.error]
         } else {
-            console.log('Card guardada:', data);
+            console.log('Card guardada:', data)
             return [true, `¡Artículo publicado exitosamente en <a class="mi-link" href="habilidades.html">Habilidades</a>!`]
         }
     } catch(err){
@@ -434,36 +539,36 @@ async function postCard(nuevaCard){
 function convertirAWebP(file) {
     return new Promise((resolve, reject) => {
         if (file.size > 0){
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
+            const reader = new FileReader()
+            reader.readAsDataURL(file)
             reader.onload = () => {
-                const img = new Image();
-                img.src = reader.result;
+                const img = new Image()
+                img.src = reader.result
 
                 img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    ctx.drawImage(img, 0, 0);
+                    const canvas = document.createElement('canvas')
+                    const ctx = canvas.getContext('2d')
+                    canvas.width = img.width
+                    canvas.height = img.height
+                    ctx.drawImage(img, 0, 0)
 
                     canvas.toBlob((blob) => {
-                        const webpReader = new FileReader();
-                        webpReader.readAsDataURL(blob);
+                        const webpReader = new FileReader()
+                        webpReader.readAsDataURL(blob)
                         webpReader.onload = () => {
-                            resolve(webpReader.result);
-                        };
+                            resolve(webpReader.result)
+                        }
                         webpReader.onerror = () => reject(new Error('Error al leer la imagen convertida a WebP.'))
-                    }, 'image/webp', 0.7);
-                };
+                    }, 'image/webp', 0.7)
+                }
 
                 img.onerror = () => reject(new Error('Error al cargar la imagen.'))
-            };
+            }
 
             reader.onerror = () => reject(new Error('Error al leer el archivo original.'))
         } else { resolve('') }
        
-    });
+    })
 }
 
 async function usarFormObject(formObject){
@@ -472,14 +577,14 @@ async function usarFormObject(formObject){
     const fechaHoy = new Date()
     formObject.fecha = fechaHoy.toISOString()
 
-    const povFileFinal = povFilePegada || formObject.povSrc;
+    const povFileFinal = povFilePegada || formObject.povSrc
     try {
         formObject.povSrc = await convertirAWebP(povFileFinal)
     } catch (err){
         return [false, 'Error al cargar la imagen POV']
     }
 
-    const mapFileFinal = mapFilePegada || formObject.mapSrc;
+    const mapFileFinal = mapFilePegada || formObject.mapSrc
     try {
         formObject.mapSrc = await convertirAWebP(mapFileFinal)
     } catch (err){
@@ -499,7 +604,7 @@ function desHabilitarInputs(enabled){
             submitBtn.removeAttribute('disabled')
             submitBtn.style.boxShadow = '0px 0px 10px var(--color2)'
             element.style.pointerEvents = 'auto'
-        });
+        })
     } else{
         formInputs.forEach(element => {
             // element.setAttribute('disabled', '')
@@ -508,7 +613,7 @@ function desHabilitarInputs(enabled){
             submitBtn.style.boxShadow = 'none'
             // element.style.opacity = '0,5'
             element.style.pointerEvents = 'none'
-        });
+        })
     }
 }
 formCrear.addEventListener('submit', async(event) => {
@@ -531,8 +636,4 @@ formCrear.addEventListener('submit', async(event) => {
     mostrarToast(resultado[0] ? 'ok' : 'error', resultado[1])
     desHabilitarInputs(true)
     submitBtn.innerHTML = 'Publicar'
-});
-
-
-
-
+})

@@ -18,10 +18,13 @@
 }
 .uploadMenu{
     /* display: none; */
+    display: flex;
+    flex-direction: column;
     position: fixed;
     background-color: var(--color7);
     height: min-content;
-    width: 285px;
+    /* width: 365px; */
+    width: fit-content;
     border: none;
     border-radius: 3px;
     padding: 10px;
@@ -36,6 +39,7 @@
     text-align: left;
     padding: 5px;
     width: 100%;
+    /* width: fit-content; */
     border: none;
     background-color: var(--color7);
     color: var(--color5);
