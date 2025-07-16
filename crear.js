@@ -204,9 +204,12 @@ mapPreview.addEventListener('contextmenu', e => {
 function devolverPegarBtn(menu){
     return menu.querySelectorAll('[id^="pegar-"]')[0]
 }
+async function devolverPermisoDePortapapeles(){
+    return await navigator.permissions.query({ name: 'clipboard-read' })
+}
 async function mostrarMenu(menuPrincipal, menuSecundario, e) {
     const pegarButtonTarget = devolverPegarBtn(menuPrincipal)
-    const permiso = await navigator.permissions.query({ name: 'clipboard-read' })
+    const permiso = await devolverPermisoDePortapapeles()
     if(permiso.state === 'granted'){
         evaluarPortapapelesYBtn(pegarButtonTarget)
     } else if(permiso.state === 'prompt'){
@@ -247,12 +250,12 @@ async function evaluarPortapapelesYBtn(btn){
 }
 function estilarPegarBtnByPermiso(button, enabled){
     if(enabled){
-        button.classList.remove('grantedState')
+        // button.classList.remove('grantedState')
         button.removeAttribute('disabled')
         button.innerHTML = `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M10 12l4 4m0 -4l-4 4" /></svg>
         Permitir acceso a portapapeles`
     }else{
-        button.classList.remove('grantedState')
+        // button.classList.remove('grantedState')
         button.setAttribute('disabled', '')
         button.innerHTML = `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M10 12l4 4m0 -4l-4 4" /></svg>
         Acceso a portapapeles denegado`
@@ -260,12 +263,12 @@ function estilarPegarBtnByPermiso(button, enabled){
 } 
 function estilarPegarBtnByItems(button, enabled){
     if(enabled){
-        button.classList.add('grantedState')
+        // button.classList.add('grantedState')
         button.removeAttribute('disabled')
         button.innerHTML = `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>
         Pegar de portapapeles`
     }else{
-        button.classList.remove('grantedState')
+        // button.classList.remove('grantedState')
         button.setAttribute('disabled', '')
         button.innerHTML = `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-off"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5.575 5.597a2 2 0 0 0 -.575 1.403v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2m0 -4v-8a2 2 0 0 0 -2 -2h-2" /><path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 1 1 0 4h-2" /><path d="M3 3l18 18" /></svg>
         Pegar de portapapeles`
@@ -277,9 +280,11 @@ pegarPov.addEventListener('click', async () => {
         return
     }
     const pegarButtonTarget = devolverPegarBtn(povMenu)
+    const hayPermiso = (await devolverPermisoDePortapapeles()).state === 'granted'
     try{
         const items = await navigator.clipboard.read()
-        if(pegarButtonTarget.classList.contains('grantedState')){
+        // pegarButtonTarget.classList.contains('grantedState')
+        if(hayPermiso){
             if (items.length > 0) {
             const item = items[0]
             for (const type of item.types) {
@@ -313,9 +318,11 @@ pegarMap.addEventListener('click', async () => {
         return
     }
     const pegarButtonTarget = devolverPegarBtn(mapMenu)
+    const hayPermiso = (await devolverPermisoDePortapapeles()).state === 'granted'
     try{
         const items = await navigator.clipboard.read()
-        if(pegarButtonTarget.classList.contains('grantedState')){
+        // pegarButtonTarget.classList.contains('grantedState')
+        if(hayPermiso){
             if (items.length > 0) {
             const item = items[0]
             for (const type of item.types) {
