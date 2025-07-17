@@ -30,7 +30,7 @@ let prevMapObjectURL = null
 let datosImportantesSinImgPegada = false
 // let vacio = true
 
-formCrear.addEventListener('input', () => {
+function actualizarEstadoDeDatos(){
     const formData = new FormData(formCrear)
 
     vacio = [...formData.values()].every(valor => {
@@ -42,14 +42,16 @@ formCrear.addEventListener('input', () => {
         return false
     }
     })
-    // const hayImagenPegada = !!povFilePegada || !!mapFilePegada
-    datosImportantesSinImgPegada = !vacio // || hayImagenPegada
-})
+    const hayImagenPegada = !!povFilePegada || !!mapFilePegada
+    const hayImagenSubida = inputPov.value !== '' || inputMap.value !== ''
+    datosImportantesSinImgPegada = !vacio || hayImagenPegada || hayImagenSubida
+}
 
+formCrear.addEventListener('change', actualizarEstadoDeDatos)
 
 window.addEventListener('beforeunload', (e) => {
-    const hayImagenPegada = !!povFilePegada || !!mapFilePegada
-    if (datosImportantesSinImgPegada || hayImagenPegada) {
+    actualizarEstadoDeDatos()
+    if (datosImportantesSinImgPegada) {
         e.preventDefault()
         e.returnValue = ''
     }
