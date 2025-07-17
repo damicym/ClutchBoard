@@ -189,14 +189,13 @@ mapPreview.addEventListener('contextmenu', e => {
     mostrarMenu(mapMenu, povMenu, e)
 })
 
-// si no tenes permiso, 
+// si no tenes permiso a portapapeles, 
 // 1. mostrar el boton con el icono y texto de pedir permiso
 // 2. una vez tocas el boton (de pedir acceso) evaluar portapapeles
 // 3. mostrar el boton según si hay items
 // si sí tenes permiso, 
 // 1. evaluar portapapeles
 // 2. mostrar el boton según si hay items
-
 // si el boton es de permitir acceso, cuando lo tocas
 // 1. evaluarPortapapelesYBtn()
 
