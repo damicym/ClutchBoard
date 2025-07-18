@@ -111,7 +111,6 @@ fetch('data/mapas.json')
     })
 
 function generarOpcionesAgentes(cards, agentes) {
-    //que se genere opciones de agentes:
     agentes.forEach(agente => {
         if (allCards.some(card => card.agente === agente.nombre)) {
             var opcion = `<option value="${agente.nombre}">${capitalizeFirstLetter(agente.nombre)}</option>`
@@ -121,7 +120,6 @@ function generarOpcionesAgentes(cards, agentes) {
 }
 
 function generarOpcionesMapas(cards, mapas) {
-    //que se genere opciones de mapas:
     mapas.forEach(mapa => {
         if (cards.some(card => card.mapa === mapa.nombre)) {
             var opcion = `<option value="${mapa.nombre}">${capitalizeFirstLetter(mapa.nombre)}</option>`
@@ -130,8 +128,16 @@ function generarOpcionesMapas(cards, mapas) {
     })
 }
 
-//💀💀💀:
+//ver si en vez de allCards mostrar por cardsActuales
+// ver pq parece ser q son las actuales en realidad
 inputAgente.addEventListener('change', event => {
+    if (!event.target.value) {
+        resetHabilidad()
+    } else inputHabilidad.disabled = false
+    
+    aplicarFiltros()
+    revisarBasura()
+
     const agenteSeleccionado = event.target.value
     const indice = agentes.findIndex(obj => obj.nombre === agenteSeleccionado)
     const agente = agentes[indice]
@@ -161,11 +167,11 @@ inputAgente.addEventListener('change', event => {
         }
     }
 })
-
-inputAgente.addEventListener('change', event => {
-    inputHabilidad.disabled = !event.target.value
-    if (!event.target.value) inputHabilidad.value = ""
-})
+// comento pq lo agrego en el principal
+// inputAgente.addEventListener('change', event => {
+//     inputHabilidad.disabled = !event.target.value
+//     if (!event.target.value) inputHabilidad.value = ""
+// })
 inputComp.addEventListener('change', event => {
     inputMapa.value = ""
     inputMapa.disabled = event.target.checked
@@ -203,10 +209,11 @@ inputMapa.addEventListener('change', event => {
     aplicarFiltros()
     revisarBasura()
 })
-inputAgente.addEventListener('change', event => {
-    aplicarFiltros()
-    revisarBasura()
-})
+// comento pq lo agrego en el principal
+// inputAgente.addEventListener('change', event => {
+//     aplicarFiltros()
+//     revisarBasura()
+// })
 inputHabilidad.addEventListener('change', event => {
     aplicarFiltros()
     revisarBasura()
@@ -254,16 +261,16 @@ function generarCards(cards, agentes, mapas) {
     let division
     if (localStorage.getItem('division')) division = localStorage.getItem('division')
     else division = "agente"
-    localStorage.getItem('division')
+    // localStorage.getItem('division')
     if (division === "agente") {
         agentes.map(agente => {
-            const agenteCards = cards.filter(card => card.agente === agente.nombre)
-            agenteCards.sort((a, b) => a.mapa.localeCompare(b.mapa))
-            if (agenteCards.length > 0) {
+            const cardsDe1Agente = cards.filter(card => card.agente === agente.nombre)
+            cardsDe1Agente.sort((a, b) => a.mapa.localeCompare(b.mapa))
+            if (cardsDe1Agente.length > 0) {
                 maxContainer.innerHTML += `<h2 class="mapa-titulo">${capitalizeFirstLetter(agente.nombre)}</h2>
                 <div class="card-container" id="${agente.nombre}-container"></div>`
                 const agenteContainer = document.getElementById(`${agente.nombre}-container`)
-                    agenteCards.map((card, index) => {
+                    cardsDe1Agente.map((card, index) => {
                         let cardHtml = `<article class="card">
                                 <p class="title">
                                     <span class="title-num">${index + 1}</span>
@@ -285,13 +292,13 @@ function generarCards(cards, agentes, mapas) {
     } else {
         if (division === "mapa") {
             mapas.map(mapa => {
-                const mapaCards = cards.filter(card => card.mapa === mapa.nombre)
-                mapaCards.sort((a, b) => a.agente.localeCompare(b.agente))
-                if (mapaCards.length > 0) {
+                const cardsDe1Mapa = cards.filter(card => card.mapa === mapa.nombre)
+                cardsDe1Mapa.sort((a, b) => a.agente.localeCompare(b.agente))
+                if (cardsDe1Mapa.length > 0) {
                     maxContainer.innerHTML += `<h2 class="mapa-titulo">${capitalizeFirstLetter(mapa.nombre)}</h2>
-                <div class="card-container" id="${mapa.nombre}-container"></div>`
+                        <div class="card-container" id="${mapa.nombre}-container"></div>`
                     const mapaContainer = document.getElementById(`${mapa.nombre}-container`)
-                    mapaCards.map((card, index) => {
+                    cardsDe1Mapa.map((card, index) => {
                         let cardHtml = `<article class="card">
                                 <p class="title">
                                     <span class="title-num">${index + 1}</span>

@@ -1,11 +1,11 @@
 [
 {
     "nombre": "abyss",
-    "compPool": true 
+    "compPool": false 
 },
 {
     "nombre": "ascent",
-    "compPool": false 
+    "compPool": true 
 },
 {
     "nombre": "bind",
@@ -16,8 +16,12 @@
     "compPool": false 
 },
 {
-    "nombre": "fracture",
+    "nombre": "corrode",
     "compPool": true 
+},
+{
+    "nombre": "fracture",
+    "compPool": false 
 },
 {
     "nombre": "heaven",
@@ -25,7 +29,7 @@
 },
 {
     "nombre": "icebox",
-    "compPool": false 
+    "compPool": true 
 },
 {
     "nombre": "lotus",
@@ -33,14 +37,14 @@
 },
 {
     "nombre": "pearl",
-    "compPool": true 
+    "compPool": false 
 },
 {
     "nombre": "split",
-    "compPool": true 
+    "compPool": false 
 },
 {
     "nombre": "sunset",
-    "compPool": false 
+    "compPool": true 
 }
 ]

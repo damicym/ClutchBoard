@@ -57,8 +57,6 @@ window.addEventListener('beforeunload', (e) => {
     }
 })
 
-
-
 function mostrarToast(status, msg) {
     const toastElement = document.getElementById('liveToast')
     let toast = bootstrap.Toast.getOrCreateInstance(toastElement, {
@@ -444,6 +442,7 @@ function capitalizeFirstLetter(val) {
     return String(val).charAt(0).toUpperCase() + String(val).slice(1)
 }
 var agentes = {}
+var mapas = {}
 
 const opcionesfecha = {
     day: '2-digit',
@@ -461,15 +460,25 @@ const fechaIntervaloSeg = setInterval(mostrarFecha, 59000)
 mostrarFecha()
 
 fetch('data/agentes.json')
-    .then(data => data.json())
-    .then(data => {
-        agentes = data
+.then(data => data.json())
+.then(data => {
+    agentes = data
 
-        agentes.map(agente => {
-            let opcion = `<option value="${agente.nombre}">${capitalizeFirstLetter(agente.nombre)}</option>`
-            agenteSelect.innerHTML += opcion
-        })
+    agentes.map(agente => {
+        let opcion = `<option value="${agente.nombre}">${capitalizeFirstLetter(agente.nombre)}</option>`
+        agenteSelect.innerHTML += opcion
     })
+})
+fetch('data/mapas.json')
+.then(data => data.json())
+.then(data => {
+    mapas = data
+
+    mapas.map(mapa => {
+        let opcion = `<option value="${mapa.nombre}">${capitalizeFirstLetter(mapa.nombre)}</option>`
+        selectMapa.innerHTML += opcion
+    })
+})
 
 
 function uncapitalize(str) {
@@ -616,13 +625,20 @@ function desHabilitarInputs(enabled){
     } else{
         formInputs.forEach(element => {
             // element.setAttribute('disabled', '')
-            selectHabilidad.setAttribute('disabled', '')
+            // selectHabilidad.setAttribute('disabled', '')
             submitBtn.setAttribute('disabled', '')
             submitBtn.style.boxShadow = 'none'
             // element.style.opacity = '0,5'
             element.style.pointerEvents = 'none'
         })
     }
+}
+function vaciarVariablesGlobales(){
+    povFilePegada = null
+    mapFilePegada = null
+    prevPovObjectURL = null
+    prevMapObjectURL = null
+    datosImportantesSinImgPegada = false
 }
 formCrear.addEventListener('submit', async(event) => {
     event.preventDefault()
@@ -643,5 +659,8 @@ formCrear.addEventListener('submit', async(event) => {
     // return [true, `¡Artículo publicado exitosamente en <a class="mi-link" href="habilidades.html">Habilidades</a>!`]
     mostrarToast(resultado[0] ? 'ok' : 'error', resultado[1])
     desHabilitarInputs(true)
+    vaciarVariablesGlobales()
+    resetPovNPreview()
+    resetMapNPreview()
     submitBtn.innerHTML = 'Publicar'
 })
