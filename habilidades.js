@@ -64,52 +64,101 @@ let agentes = []
 let mapas = []
 let compMaps = []
 let cardsActuales = []
-fetch('data/mapas.json')
-    .then(data => data.json())
-    .then(data => {
-        mapas = data
+let dbCards = []
+let localCards = []
+const opcionesfecha = {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+}
 
-        // estos 3 localstorag hay q sacar para usar la base de datos
+// declaro división:
+if (localStorage.getItem('division')) inputDivision.value = localStorage.getItem('division')
+else inputDivision.value = "agente"
+
+// mostrar cargando
+await cargarDatos()
+generarOpcionesMapas(allCards, mapas)
+generarOpcionesAgentes(allCards, agentes)
+generarCards(cardsActuales, agentes, mapas)
+// dejar de cargar
+
+
+// mapasLocales, agentesLocales, cardsLocales, cardsBd (si quiero hacer por separado)
+async function cargarDatos() {
+    try{
+        const responseMapas = await fetch('data/mapas.json')
+        mapas = await responseMapas.json()
         mapas.forEach(mapa => {
             if (mapa.compPool) compMaps.push(mapa.nombre)
         })
-        fetch('data/agentes.json')
-            .then(data => data.json())
-            .then(data => {
-                agentes = data
-                fetch('data/cards.json')
-                    .then(data => data.json())
-                    .then(data => {
-                        var JsonCards = data
-                        let dbCards = []
-                        // conseguir cards del localStorage:
-                        // for (let index = 0; index < localStorage.length; index++) {
-                        //     let key = localStorage.key(index)
-                        //     if (key.startsWith("form")) {
-                        //         let formData = JSON.parse(localStorage.getItem(key)) || []
-                        //         dbCards.push(formData)
-                        //     }
-                        // }
-                        // conseguir cards de la BD:
-                        fetch('http://localhost:3000/cards', {
-                            method: 'GET'
-                        })
-                        .then(res => res.json())
-                        .then(cards => {
-                            dbCards = cards
-                            allCards = [...dbCards, ...JsonCards]
-                            cardsActuales = allCards
-                            generarOpcionesMapas(allCards, mapas)
-                            generarOpcionesAgentes(allCards, agentes)
-                            generarCards(cardsActuales, agentes, mapas)
-                        })
-                        .catch(err => {
-                            console.error('Error al obtener las cards:', err);
-                        });
-                    })
-            })
+    } catch (err){
+        mostrarToast('error', 'Error al cargar los mapas')
+    }
+    
+    try{
+        const responseAgentes = await fetch('data/agentes.json')
+        agentes = await responseAgentes.json()
+    } catch (err){
+        mostrarToast('error', 'Error al cargar los agentes')
+    }
 
-    })
+    try{
+        const responseLocalCards = await fetch('data/cards.json')
+        localCards = await responseLocalCards.json()
+    } catch (err){
+        mostrarToast('error', 'Error al cargar artículos')
+    }
+
+    try{
+        const responseDbCards = await fetch('http://localhost:3000/cards', { method: 'GET' })
+        dbCards = await responseDbCards.json()
+    } catch (err){
+        mostrarToast('error', 'Error al cargar artículos del servidor')
+    }
+    
+    allCards = [...dbCards, ...localCards]
+    cardsActuales = allCards
+
+}
+
+// fetch('data/mapas.json')
+//     .then(data => data.json())
+//     .then(data => {
+//         mapas = data
+//         mapas.forEach(mapa => {
+//             if (mapa.compPool) compMaps.push(mapa.nombre)
+//         })
+//         fetch('data/agentes.json')
+//             .then(data => data.json())
+//             .then(data => {
+//                 agentes = data
+//                 fetch('data/cards.json')
+//                     .then(data => data.json())
+//                     .then(data => {
+//                         localCards = data // lo declaro arriba
+//                         // let dbCards = [] lo puse arriba
+//                         fetch('http://localhost:3000/cards', {
+//                             method: 'GET'
+//                         })
+//                         .then(res => res.json())
+//                         .then(cards => {
+//                             dbCards = cards
+//                             allCards = [...dbCards, ...localCards]
+//                             cardsActuales = allCards
+//                             generarOpcionesMapas(allCards, mapas)
+//                             generarOpcionesAgentes(allCards, agentes)
+//                             generarCards(cardsActuales, agentes, mapas)
+//                         })
+//                         .catch(err => {
+//                             console.error('Error al obtener las cards:', err);
+//                         });
+//                     })
+//             })
+//     })
 
 function generarOpcionesAgentes(cards, agentes) {
     agentes.forEach(agente => {
@@ -270,22 +319,14 @@ function aplicarFiltros() {
     <span class="mi-link" onclick="vaciarInput(true)">Borrar todas las condiciones de búsqueda</span>
     </div>`
 }
-// declaro división:
-if (localStorage.getItem('division')) inputDivision.value = localStorage.getItem('division')
-else inputDivision.value = "agente"
 inputDivision.addEventListener('change', event => {
     var division = event.target.value
     localStorage.setItem('division', division)
     generarCards(cardsActuales, agentes, mapas)
 })
-const opcionesfecha = {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
-};
+formHb.addEventListener('submit', event => {
+    event.preventDefault()
+})
 function generarCards(cards, agentes, mapas) {
     maxContainer.innerHTML = ""
     let division
@@ -351,7 +392,3 @@ function generarCards(cards, agentes, mapas) {
         }
     }
 }
-// <span class="fecha-card">${card.fecha}</span>
-formHb.addEventListener('submit', event => {
-    event.preventDefault()
-})
