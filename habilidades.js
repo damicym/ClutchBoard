@@ -7,6 +7,7 @@ const inputMapa = document.getElementById('mapa-input-form-hb')
 const inputComp = document.getElementById('comp-input-form-hb')
 const formHb = document.getElementById('form-hb')
 const basura = document.getElementById('basura')
+const vaciarAutor = document.getElementById('vaciar-autor')
 
 function capitalizeFirstLetter(val) {
     return String(val).charAt(0).toUpperCase() + String(val).slice(1)
@@ -128,44 +129,43 @@ function generarOpcionesMapas(cards, mapas) {
     })
 }
 
-//ver si en vez de allCards mostrar por cardsActuales
-// ver pq parece ser q son las actuales en realidad
 inputAgente.addEventListener('change', event => {
     if (!event.target.value) {
         resetHabilidad()
-    } else inputHabilidad.disabled = false
-    
-    aplicarFiltros()
-    revisarBasura()
+    } else {
+        inputHabilidad.disabled = false
 
-    const agenteSeleccionado = event.target.value
-    const indice = agentes.findIndex(obj => obj.nombre === agenteSeleccionado)
-    const agente = agentes[indice]
-    inputHabilidad.innerHTML = ""
-    inputHabilidad.insertAdjacentHTML('beforeend', '<option value="">Elige una habilidad</option>')
-    var cardsAgenteSeleccionado = allCards.filter(card => card.agente === agenteSeleccionado)
-    if (cardsAgenteSeleccionado.some(card => card.habilidad === agente.habilidades.h1)) {
-        let opcion1 = `<option value="${agente.habilidades.h1}">${capitalizeFirstLetter(agente.habilidades.h1)}</option>`
-        inputHabilidad.insertAdjacentHTML('beforeend', opcion1)
-    }
-    if (cardsAgenteSeleccionado.some(card => card.habilidad === agente.habilidades.h2)) {
-        let opcion2 = `<option value="${agente.habilidades.h2}">${capitalizeFirstLetter(agente.habilidades.h2)}</option>`
-        inputHabilidad.insertAdjacentHTML('beforeend', opcion2)
-    }
-    if (cardsAgenteSeleccionado.some(card => card.habilidad === agente.habilidades.h3)) {
-        let opcion3 = `<option value="${agente.habilidades.h3}">${capitalizeFirstLetter(agente.habilidades.h3)}</option>`
-        inputHabilidad.insertAdjacentHTML('beforeend', opcion3)
-    }
-    if (cardsAgenteSeleccionado.some(card => card.habilidad === agente.habilidades.h4)) {
-        let opcion4 = `<option value="${agente.habilidades.h4}">${capitalizeFirstLetter(agente.habilidades.h4)}</option>`
-        inputHabilidad.insertAdjacentHTML('beforeend', opcion4)
-    }
-    if (agente.habilidades.h5) {
-        if (cardsAgenteSeleccionado.some(card => card.habilidad === agente.habilidades.h5)) {
-            let opcion5 = `<option value="${agente.habilidades.h5}">${capitalizeFirstLetter(agente.habilidades.h5)}</option>`
-            inputHabilidad.insertAdjacentHTML('beforeend', opcion5)
+        const agenteSeleccionado = event.target.value
+        const indice = agentes.findIndex(obj => obj.nombre === agenteSeleccionado)
+        const agente = agentes[indice]
+        inputHabilidad.innerHTML = ""
+        inputHabilidad.insertAdjacentHTML('beforeend', '<option value="">Elige una habilidad</option>')
+        var cardsAgenteSeleccionado = allCards.filter(card => card.agente === agenteSeleccionado)
+        if (cardsAgenteSeleccionado.some(card => card.habilidad === agente.habilidades.h1)) {
+            let opcion1 = `<option value="${agente.habilidades.h1}">${capitalizeFirstLetter(agente.habilidades.h1)}</option>`
+            inputHabilidad.insertAdjacentHTML('beforeend', opcion1)
+        }
+        if (cardsAgenteSeleccionado.some(card => card.habilidad === agente.habilidades.h2)) {
+            let opcion2 = `<option value="${agente.habilidades.h2}">${capitalizeFirstLetter(agente.habilidades.h2)}</option>`
+            inputHabilidad.insertAdjacentHTML('beforeend', opcion2)
+        }
+        if (cardsAgenteSeleccionado.some(card => card.habilidad === agente.habilidades.h3)) {
+            let opcion3 = `<option value="${agente.habilidades.h3}">${capitalizeFirstLetter(agente.habilidades.h3)}</option>`
+            inputHabilidad.insertAdjacentHTML('beforeend', opcion3)
+        }
+        if (cardsAgenteSeleccionado.some(card => card.habilidad === agente.habilidades.h4)) {
+            let opcion4 = `<option value="${agente.habilidades.h4}">${capitalizeFirstLetter(agente.habilidades.h4)}</option>`
+            inputHabilidad.insertAdjacentHTML('beforeend', opcion4)
+        }
+        if (agente.habilidades.h5) {
+            if (cardsAgenteSeleccionado.some(card => card.habilidad === agente.habilidades.h5)) {
+                let opcion5 = `<option value="${agente.habilidades.h5}">${capitalizeFirstLetter(agente.habilidades.h5)}</option>`
+                inputHabilidad.insertAdjacentHTML('beforeend', opcion5)
+            }
         }
     }
+    aplicarFiltros()
+    revisarBasura()
 })
 // comento pq lo agrego en el principal
 // inputAgente.addEventListener('change', event => {
@@ -175,6 +175,8 @@ inputAgente.addEventListener('change', event => {
 inputComp.addEventListener('change', event => {
     inputMapa.value = ""
     inputMapa.disabled = event.target.checked
+    aplicarFiltros()
+    revisarBasura()
 })
 function resetHabilidad() {
     inputHabilidad.value = ""
@@ -184,28 +186,43 @@ function resetMapa() {
     inputMapa.value = ""
     inputMapa.disabled = false
 }
+
+// cuando se toca la basura,
+// si hay valores, anima
+
+
 function vaciarInput(autorBool) {
-    basura.style.animation = "shake2 0.5s ease-in-out"
-    if (autorBool) inputAutor.value = ""
-    inputAgente.value = ""
-    inputComp.checked = false
-    resetHabilidad()
-    resetMapa()
-    aplicarFiltros()
-    revisarBasura()
+    basura.style.animation = "none"
+    basura.offsetWidth
+    if (inputComp.checked || inputMapa.value || inputAgente.value || inputHabilidad.value){
+        basura.style.animation = "shake2 0.5s ease-in-out"
+        basura.style.color = "#D8C99B"
+        resetHabilidad()
+        resetMapa()
+        inputAgente.value = ""
+        inputComp.checked = false
+        aplicarFiltros()
+    }
+    if (autorBool) {
+        inputAutor.value = ''
+        inputAutor.dispatchEvent(new Event('input'));
+        aplicarFiltros()
+    }
+    // revisarBasura()
 }
 function revisarBasura() {
+    basura.style.animation = "none"
+    basura.offsetWidth
     if (inputComp.checked || inputMapa.value || inputAgente.value || inputHabilidad.value){
-        basura.style.animation = "none"
-        basura.offsetHeight
-        setTimeout(function() {
-            basura.style.animation = "shake 0.5s ease-in-out"
-        }, 10)
+        basura.style.animation = "shake 0.5s ease-in-out"
         basura.style.color = "#BD632F"
     }
-    else basura.style.color = "#D8C99B"
+    else {
+        basura.style.animation = "shake2 0.5s ease-in-out"
+        basura.style.color = "#D8C99B"
+    }
 }
-inputMapa.addEventListener('change', event => {
+inputMapa.addEventListener('change', () => {
     aplicarFiltros()
     revisarBasura()
 })
@@ -214,17 +231,30 @@ inputMapa.addEventListener('change', event => {
 //     aplicarFiltros()
 //     revisarBasura()
 // })
-inputHabilidad.addEventListener('change', event => {
+inputHabilidad.addEventListener('change', () => {
     aplicarFiltros()
     revisarBasura()
 })
-inputComp.addEventListener('change', event => {
-    aplicarFiltros()
-    revisarBasura()
-})
+// inputComp.addEventListener('change', event => {
+//     aplicarFiltros()
+//     revisarBasura()
+// })
 inputAutor.addEventListener('input', event => {
+    if(event.target.value){
+        vaciarAutor.style.display = 'block'
+        vaciarAutor.setAttribute('tabindex', '0')
+    } else {
+        vaciarAutor.style.display = 'none'
+        vaciarAutor.setAttribute('tabindex', '-1')
+    }
     aplicarFiltros()
 })
+vaciarAutor.addEventListener('click', event => {
+    inputAutor.value = ''
+    inputAutor.dispatchEvent(new Event('input'));
+})
+// vaciarAutor.style.display = 'none'
+//     aplicarFiltros()
 
 
 function aplicarFiltros() {
@@ -234,10 +264,10 @@ function aplicarFiltros() {
     if (inputAgente.value) cardsActuales = cardsActuales.filter(card => card.agente === inputAgente.value)
     if (inputHabilidad.value) cardsActuales = cardsActuales.filter(card => card.habilidad === inputHabilidad.value)
     if (inputAutor.value) cardsActuales = cardsActuales.filter(card => card.nombre.toLowerCase().includes(inputAutor.value.toLowerCase()))
-    generarCards(cardsActuales, agentes, mapas) //a esto le vas a tener q pasar mapas dsps para lo de dividir
+    generarCards(cardsActuales, agentes, mapas)
     if (cardsActuales.length === 0) maxContainer.innerHTML += `<div class="no-result">
     <h2 class="mapa-titulo" style="margin-bottom: 10px; color: #BD632F;">No se encontró ningún resultado :(</h2>
-    <span class="mi-link" onclick="vaciarInput(true)">Borrar condiciones de filtro</span>
+    <span class="mi-link" onclick="vaciarInput(true)">Borrar todas las condiciones de búsqueda</span>
     </div>`
 }
 // declaro división:
@@ -310,7 +340,8 @@ function generarCards(cards, agentes, mapas) {
                                 <p class="desc">${card.desc}</p>
                                <div class="firma">
                                     <span class="autor">${card.nombre} •</span>
-                                    <span class="fecha-card">${card.fecha}</span>
+                                    
+                                    <span class="fecha-card">${new Date(card.fecha).toLocaleString('es-ES', opcionesfecha).replace(',', ' •')}</span>
                                </div>
                             </article>`
                         mapaContainer.innerHTML += cardHtml
@@ -320,7 +351,7 @@ function generarCards(cards, agentes, mapas) {
         }
     }
 }
-
+// <span class="fecha-card">${card.fecha}</span>
 formHb.addEventListener('submit', event => {
     event.preventDefault()
 })

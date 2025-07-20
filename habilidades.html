@@ -23,7 +23,7 @@
     </nav>
 
     <p>Este es nuestro repertorio de habilidades (poné el cursor en un <span
-            style="color:#BD632F;; font-weight: 500;">mapa</span> para agrandarlo). Si te interesa, podés <a
+            style="color:#BD632F;; font-weight: 570;">mapa</span> para agrandarlo). Si te interesa, podés <a
             class="mi-link" href="crear.html">crear</a> tu propio artículo para que cualquiera pueda
         aprender tu jugada</p>
     <form id="form-hb">
@@ -31,6 +31,7 @@
 
             <div class="filter-search-container">
                 <div name="para q no haya gap" style="display: flex; flex-direction:row;">
+                    <!-- vaciarInput(true) -->
                     <button onclick="vaciarInput()" type="button" class="icon-filter-button"><svg
                             xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                             class="bi bi-trash-fill" id="basura" viewBox="1.7 0 16 14.4">
@@ -46,7 +47,7 @@
                             Rotación competitiva
 
                         </label>
-                        <div class="select-filter-container">
+                        <!-- <div class="select-filter-container"> -->
                             <select name="mapa-input-form-hb" id="mapa-input-form-hb">
                                 <option value="">Elige un mapa</option>
                             </select>
@@ -56,7 +57,7 @@
                             <select name="habilidad-input-form-hb" id="habilidad-input-form-hb">
                                 <option value="">Elige una habilidad</option>
                             </select>
-                        </div>
+                        <!-- </div> -->
                     </div>
                 </div>
             <!-- </div>
@@ -67,10 +68,11 @@
 
     <div class="search-container">
         <label class="filter-label" style="color: #D8C99B; display: flex; align-items: center;">Autor</label>
-        <input id="autor-input-form-hb" type="text" autocomplete="off" class="input-form-hb" placeholder="ej.: domix">
-        <!-- <button class="vaciar-autor-button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
-            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-          </svg></button> -->
+        <div class="input-wrapper">
+            <input id="autor-input-form-hb" type="text" autocomplete="off" class="input-form-hb" placeholder="ej.: domix">
+            <button class="vaciar-autor-button" id="vaciar-autor" tabindex="-1"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="4.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" />
+            </svg></button>
+        </div>
     </div>
     <!-- filter-serach-container: -->
     </div>
