@@ -643,8 +643,8 @@ function vaciarVariablesGlobales(){
 formCrear.addEventListener('submit', async(event) => {
     event.preventDefault()
     desHabilitarInputs(false)
+    // <span class="visually-hidden">Loading...</span>
     submitBtn.innerHTML = `<div class="spinner-border" role="status" id="spinner-in-submit">
-                                <span class="visually-hidden">Loading...</span>
                             </div>
                             Cargando...`
    

@@ -262,6 +262,24 @@ select {
     padding: 5px;
     font-weight: 500;
 }
+.ordenarBtn{
+    font-size: 1rem;
+    border: 2px solid var(--color5);
+    border-radius: 8px;
+    background-color: var(--color2);
+    color: var(--color5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    padding: 5px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    /* min-width: 70px; */
+    min-width: 100px;
+    /* justify-content: center; */
+}
 
 select::-webkit-scrollbar {
     width: 6px;
@@ -599,6 +617,7 @@ h4 {
     border: 5px solid var(--color5);
     border-radius: 8px;
     justify-content: center;
+    padding-left: 5px;
 }
 
 .filter-container {
@@ -830,4 +849,36 @@ input[type="checkbox"]:checked~.custom-checkbox::after {
 
 .checkbox-label .custom-checkbox:hover {
     border-color: var(--color3);
+}
+.cargandoContainer{
+    /* margin-top: 4%; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    /* box-shadow: 10px 0px 10px var(--color5); */
+    /* filter: drop-shadow(0px 0px 15px var(--color5)); */
+}
+.spinnerHb{
+    width: 2rem; 
+    height: 2rem; 
+    border: 6px solid var(--color3); 
+    border-top: 6px solid transparent; 
+    border-radius: 50%; 
+    animation: spin 0.6s linear infinite;
+}
+#maxContainer{
+    padding-top: 5px;
+}
+.mensajeBajoFiltros{
+    color: var(--color1);
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin: 0;
+    margin-top: 5px;
+    font-weight: 550;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }

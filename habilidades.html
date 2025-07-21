@@ -27,11 +27,10 @@
             class="mi-link" href="crear.html">crear</a> tu propio artículo para que cualquiera pueda
         aprender tu jugada</p>
     <form id="form-hb">
-        <div class="max-filter-container">
+        <div class="max-filter-container" id="max-filter-container">
 
             <div class="filter-search-container">
                 <div name="para q no haya gap" style="display: flex; flex-direction:row;">
-                    <!-- vaciarInput(true) -->
                     <button onclick="vaciarInput(false)" type="button" class="icon-filter-button"><svg
                             xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                             class="bi bi-trash-fill" id="basura" viewBox="1.7 0 16 14.4">
@@ -77,31 +76,21 @@
     <!-- filter-serach-container: -->
     </div>
     <div class="ordenar-container">
-        <label class="filter-label" style="color: #D8C99B; display: flex; align-items: center;">Ordenar por</label>
-        <select name="ordenar-select" id="order-input-form-hb">
-            <option value="agente">Agente</option>
-            <option value="mapa">Mapa</option>
-        </select>
+        <label class="filter-label" style="color: #D8C99B; display: flex; align-items: center;">Ordenando por</label>
+        <button class="ordenarBtn" id="ordenar-btn" type="button"></button>
     </div>
 
     </div>
 </form>
-    <div id="maxContainer"></div>
-
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="toast-hb" class="toast align-items-center border-0 mi-toast" role="alert" aria-live="assertive"
-            aria-atomic="true" data-bs-delay="3000">
-            <div class="d-flex">
-                <div class="spinner-border" role="status" id="spinner">
-                        <span class="visually-hidden"></span>
-                    </div>
-                <div class="toast-body">
-                    <!-- mensaje -->
-                </div>
-            </div>
+    <div id="maxContainer">
+        <div class="cargandoContainer">
+            <div class="spinnerHb"></div>
+            <h2>Cargando...</h2>
         </div>
     </div>
-    <!-- type="module"  -->
+
+    <p id="p"></p>
+
     <script src="habilidades.js"></script>
 </body>
 </html>

@@ -8,6 +8,8 @@ const inputComp = document.getElementById('comp-input-form-hb')
 const formHb = document.getElementById('form-hb')
 const basura = document.getElementById('basura')
 const vaciarAutor = document.getElementById('vaciar-autor')
+const maxFilterContainer = document.getElementById('max-filter-container')
+const ordenarBtn = document.getElementById('ordenar-btn')
 
 function capitalizeFirstLetter(val) {
     return String(val).charAt(0).toUpperCase() + String(val).slice(1)
@@ -15,50 +17,51 @@ function capitalizeFirstLetter(val) {
 function uncapitalize(str) {
     return str.charAt(0).toLowerCase() + str.slice(1)
 }
-function mostrarToast(status, msg) {
-    const toastElement = document.getElementById('toast-hb')
-    let toast = bootstrap.Toast.getOrCreateInstance(toastElement, {
-        autohide: false
-    })
-    toastElement.classList.remove('ok', 'error', 'loading')
-    toastElement.classList.add(status)
-    if (status === 'loading') spinner.style.display = 'block'
-    else spinner.style.display = 'none'
-    toastElement.querySelector('.toast-body').innerHTML = msg
-    toast.show()
+// function mostrarToast(status, msg) {
+//     const toastElement = document.getElementById('toast-hb')
+//     let toast = bootstrap.Toast.getOrCreateInstance(toastElement, {
+//         autohide: false
+//     })
+//     toastElement.classList.remove('ok', 'error', 'loading')
+//     toastElement.classList.add(status)
+//     if (status === 'loading') spinner.style.display = 'block'
+//     else spinner.style.display = 'none'
+//     toastElement.querySelector('.toast-body').innerHTML = msg
+//     toast.show()
 
-    if(status !== 'loading'){
-        let isHovered = false
-        let leaveTimeoutId = null
-        function handleMouseEnter() {
-            isHovered = true
-            if (leaveTimeoutId) {
-                clearTimeout(leaveTimeoutId)
-                leaveTimeoutId = null
-            }
-        }
-        function handleMouseLeave() {
-            isHovered = false
-            leaveTimeoutId = setTimeout(() => {
-                toast.hide()
-            }, 2500)
-        }
-        toastElement.addEventListener('mouseenter', handleMouseEnter)
-        toastElement.addEventListener('mouseleave', handleMouseLeave)
-        setTimeout(() => {
-            if (!isHovered) {
-                toast.hide()
-            }
-        }, 2500)
-    }
+//     if(status !== 'loading'){
+//         let isHovered = false
+//         let leaveTimeoutId = null
+//         function handleMouseEnter() {
+//             isHovered = true
+//             if (leaveTimeoutId) {
+//                 clearTimeout(leaveTimeoutId)
+//                 leaveTimeoutId = null
+//             }
+//         }
+//         function handleMouseLeave() {
+//             isHovered = false
+//             leaveTimeoutId = setTimeout(() => {
+//                 toast.hide()
+//             }, 2500)
+//         }
+//         toastElement.addEventListener('mouseenter', handleMouseEnter)
+//         toastElement.addEventListener('mouseleave', handleMouseLeave)
+//         setTimeout(() => {
+//             if (!isHovered) {
+//                 toast.hide()
+//             }
+//         }, 2500)
+//     }
 
-    toastElement.addEventListener('hidden.bs.toast', function cleanup() {
-        toastElement.removeEventListener('mouseenter', handleMouseEnter)
-        toastElement.removeEventListener('mouseleave', handleMouseLeave)
-        toastElement.removeEventListener('hidden.bs.toast', cleanup)
-    })
-}
+//     toastElement.addEventListener('hidden.bs.toast', function cleanup() {
+//         toastElement.removeEventListener('mouseenter', handleMouseEnter)
+//         toastElement.removeEventListener('mouseleave', handleMouseLeave)
+//         toastElement.removeEventListener('hidden.bs.toast', cleanup)
+//     })
+// }
 resetHabilidad()
+// let division = "agente"
 let allCards = []
 let agentes = []
 let mapas = []
@@ -77,18 +80,34 @@ const opcionesfecha = {
 main()
 
 async function main() {
-    // declaro división:
-    if (localStorage.getItem('division')) inputDivision.value = localStorage.getItem('division')
-    else inputDivision.value = "agente"
-
-    // mostrar cargando
+    ordenarBtn.innerHTML = `
+    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-transfer-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 4v16l-6 -5.5" /><path d="M14 20v-16l6 5.5" /></svg>
+    ${capitalizeFirstLetter(devolverDivision())}`
+    
     await cargarDatos()
     generarOpcionesMapas(allCards, mapas)
     generarOpcionesAgentes(allCards, agentes)
-    // dejar de cargar
     generarCards(cardsActuales, agentes, mapas)
 }
-
+function devolverDivision(){
+    if(!localStorage.getItem('division')) localStorage.setItem('division', "agente")
+    return localStorage.getItem('division')
+}
+// inputDivision.addEventListener('change', event => {
+//     var division = event.target.value
+//     localStorage.setItem('division', division)
+//     generarCards(cardsActuales, agentes, mapas)
+// })
+ordenarBtn.addEventListener('click', () => {
+    var division = devolverDivision()
+    if(division === "agente") division = "mapa"
+        else division = "agente"
+        ordenarBtn.innerHTML = `
+        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-transfer-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 4v16l-6 -5.5" /><path d="M14 20v-16l6 5.5" /></svg>
+    ${capitalizeFirstLetter(division)}`
+    localStorage.setItem('division', division)
+    generarCards(cardsActuales, agentes, mapas)
+})
 // mapasLocales, agentesLocales, cardsLocales, cardsBd (si quiero hacer por separado)
 async function cargarDatos() {
     try{
@@ -98,69 +117,42 @@ async function cargarDatos() {
             if (mapa.compPool) compMaps.push(mapa.nombre)
         })
     } catch (err){
-        mostrarToast('error', 'Error al cargar los mapas')
+        console.log('Error al cargar los mapas: ' + err)
     }
     
     try{
         const responseAgentes = await fetch('data/agentes.json')
         agentes = await responseAgentes.json()
     } catch (err){
-        mostrarToast('error', 'Error al cargar los agentes')
+        console.log('Error al cargar los agentes: ' + err)
     }
 
     try{
         const responseLocalCards = await fetch('data/cards.json')
         localCards = await responseLocalCards.json()
     } catch (err){
-        mostrarToast('error', 'Error al cargar artículos')
+        console.log('Error al cargar artículos locales: ' + err)
     }
 
     try{
         const responseDbCards = await fetch('http://localhost:3000/cards', { method: 'GET' })
         dbCards = await responseDbCards.json()
     } catch (err){
-        mostrarToast('error', 'Error al cargar artículos del servidor')
+        console.log('Error al cargar artículos del servidor: ' + err)
+        mensajeBajoFiltros('No estás viendo todos los artículos: hubo un error al cargar los artículos del servidor')
     }
     
     allCards = [...dbCards, ...localCards]
     cardsActuales = allCards
 
 }
-
-// fetch('data/mapas.json')
-//     .then(data => data.json())
-//     .then(data => {
-//         mapas = data
-//         mapas.forEach(mapa => {
-//             if (mapa.compPool) compMaps.push(mapa.nombre)
-//         })
-//         fetch('data/agentes.json')
-//             .then(data => data.json())
-//             .then(data => {
-//                 agentes = data
-//                 fetch('data/cards.json')
-//                     .then(data => data.json())
-//                     .then(data => {
-//                         localCards = data // lo declaro arriba
-//                         // let dbCards = [] lo puse arriba
-//                         fetch('http://localhost:3000/cards', {
-//                             method: 'GET'
-//                         })
-//                         .then(res => res.json())
-//                         .then(cards => {
-//                             dbCards = cards
-//                             allCards = [...dbCards, ...localCards]
-//                             cardsActuales = allCards
-//                             generarOpcionesMapas(allCards, mapas)
-//                             generarOpcionesAgentes(allCards, agentes)
-//                             generarCards(cardsActuales, agentes, mapas)
-//                         })
-//                         .catch(err => {
-//                             console.error('Error al obtener las cards:', err);
-//                         });
-//                     })
-//             })
-//     })
+function mensajeBajoFiltros(msg) {
+    const mensajeElemento = document.getElementById('p')
+    mensajeElemento.innerHTML = `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-alert-triangle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 1.67c.955 0 1.845 .467 2.39 1.247l.105 .16l8.114 13.548a2.914 2.914 0 0 1 -2.307 4.363l-.195 .008h-16.225a2.914 2.914 0 0 1 -2.582 -4.2l.099 -.185l8.11 -13.538a2.914 2.914 0 0 1 2.491 -1.403zm.01 13.33l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007zm-.01 -7a1 1 0 0 0 -.993 .883l-.007 .117v4l.007 .117a1 1 0 0 0 1.986 0l.007 -.117v-4l-.007 -.117a1 1 0 0 0 -.993 -.883z" /></svg>
+    ${msg}`
+    mensajeElemento.className = 'mensajeBajoFiltros'
+    maxFilterContainer.after(mensajeElemento)
+}
 
 function generarOpcionesAgentes(cards, agentes) {
     agentes.forEach(agente => {
@@ -321,11 +313,6 @@ function aplicarFiltros() {
     <span class="mi-link" onclick="vaciarInput(true)">Borrar todas las condiciones de búsqueda</span>
     </div>`
 }
-inputDivision.addEventListener('change', event => {
-    var division = event.target.value
-    localStorage.setItem('division', division)
-    generarCards(cardsActuales, agentes, mapas)
-})
 formHb.addEventListener('submit', event => {
     event.preventDefault()
 })
