@@ -74,18 +74,20 @@ const opcionesfecha = {
     minute: '2-digit',
     hour12: false
 }
+main()
 
-// declaro división:
-if (localStorage.getItem('division')) inputDivision.value = localStorage.getItem('division')
-else inputDivision.value = "agente"
+async function main() {
+    // declaro división:
+    if (localStorage.getItem('division')) inputDivision.value = localStorage.getItem('division')
+    else inputDivision.value = "agente"
 
-// mostrar cargando
-await cargarDatos()
-generarOpcionesMapas(allCards, mapas)
-generarOpcionesAgentes(allCards, agentes)
-generarCards(cardsActuales, agentes, mapas)
-// dejar de cargar
-
+    // mostrar cargando
+    await cargarDatos()
+    generarOpcionesMapas(allCards, mapas)
+    generarOpcionesAgentes(allCards, agentes)
+    // dejar de cargar
+    generarCards(cardsActuales, agentes, mapas)
+}
 
 // mapasLocales, agentesLocales, cardsLocales, cardsBd (si quiero hacer por separado)
 async function cargarDatos() {
