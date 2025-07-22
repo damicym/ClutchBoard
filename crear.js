@@ -83,7 +83,7 @@ function mostrarToast(status, msg) {
             isHovered = false
             leaveTimeoutId = setTimeout(() => {
                 toast.hide()
-            }, 3000)
+            }, 4000)
         }
         toastElement.addEventListener('mouseenter', handleMouseEnter)
         toastElement.addEventListener('mouseleave', handleMouseLeave)
@@ -91,7 +91,7 @@ function mostrarToast(status, msg) {
             if (!isHovered) {
                 toast.hide()
             }
-        }, 3000)
+        }, 4000)
     }
 
     toastElement.addEventListener('hidden.bs.toast', function cleanup() {
@@ -545,11 +545,16 @@ async function postCard(nuevaCard){
             return [false, data.error]
         } else {
             console.log('Card guardada:', data)
-            return [true, `¡Artículo publicado exitosamente en <a class="mi-link" href="habilidades.html">Habilidades</a>!`]
+            return [true, `¡Artículo publicado exitosamente en la <a class="mi-link" href="habilidades.html">Galeria</a>!`]
         }
     } catch(err){
         console.error('Error al guardar la card:', err)
-        [false, err?.message || 'No se pudo guardar el artículo']
+        const mensajeError =
+            err instanceof TypeError && err.message.includes('Failed to fetch')
+                ? 'No se pudo conectar al servidor. Intentalo más tarde'
+                : 'Ocurrió un error inesperado al intentar guardar el artículo';
+        return [false, mensajeError]
+        // 'No se pudo guardar el artículo (error del servidor)'
     }
 }
 
@@ -612,7 +617,7 @@ async function usarFormObject(formObject){
 }
 
 function desHabilitarInputs(enabled){
-    const formInputs = [povPreview, mapPreview, submitBtn, agenteSelect, selectHabilidad, selectMapa, inputNombre, inputDesc, inputTitle]
+    const formInputs = [povPreview, mapPreview, submitBtn, agenteSelect, selectHabilidad, selectMapa, inputNombre, inputDesc, inputTitle, inputPov, inputMap]
     
     if(enabled){
         formInputs.forEach(element => {

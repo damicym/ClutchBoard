@@ -17,51 +17,8 @@ function capitalizeFirstLetter(val) {
 function uncapitalize(str) {
     return str.charAt(0).toLowerCase() + str.slice(1)
 }
-// function mostrarToast(status, msg) {
-//     const toastElement = document.getElementById('toast-hb')
-//     let toast = bootstrap.Toast.getOrCreateInstance(toastElement, {
-//         autohide: false
-//     })
-//     toastElement.classList.remove('ok', 'error', 'loading')
-//     toastElement.classList.add(status)
-//     if (status === 'loading') spinner.style.display = 'block'
-//     else spinner.style.display = 'none'
-//     toastElement.querySelector('.toast-body').innerHTML = msg
-//     toast.show()
 
-//     if(status !== 'loading'){
-//         let isHovered = false
-//         let leaveTimeoutId = null
-//         function handleMouseEnter() {
-//             isHovered = true
-//             if (leaveTimeoutId) {
-//                 clearTimeout(leaveTimeoutId)
-//                 leaveTimeoutId = null
-//             }
-//         }
-//         function handleMouseLeave() {
-//             isHovered = false
-//             leaveTimeoutId = setTimeout(() => {
-//                 toast.hide()
-//             }, 2500)
-//         }
-//         toastElement.addEventListener('mouseenter', handleMouseEnter)
-//         toastElement.addEventListener('mouseleave', handleMouseLeave)
-//         setTimeout(() => {
-//             if (!isHovered) {
-//                 toast.hide()
-//             }
-//         }, 2500)
-//     }
 
-//     toastElement.addEventListener('hidden.bs.toast', function cleanup() {
-//         toastElement.removeEventListener('mouseenter', handleMouseEnter)
-//         toastElement.removeEventListener('mouseleave', handleMouseLeave)
-//         toastElement.removeEventListener('hidden.bs.toast', cleanup)
-//     })
-// }
-resetHabilidad()
-// let division = "agente"
 let allCards = []
 let agentes = []
 let mapas = []
@@ -77,13 +34,24 @@ const opcionesfecha = {
     minute: '2-digit',
     hour12: false
 }
+// const observer = new IntersectionObserver((entries) => {
+//     entries.forEach((entry) => {
+//         if(entry.isIntersecting){
+//             entry.target.classList.add('show')
+//         } else{
+//             entry.target.classList.remove('show')
+//         }
+//     })
+// })
+// const hiddenElements = document.querySelectorAll('.hidden')
+// hiddenElements.forEach((el) => observer.observe(el))
 main()
 
 async function main() {
     ordenarBtn.innerHTML = `
     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-transfer-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 4v16l-6 -5.5" /><path d="M14 20v-16l6 5.5" /></svg>
     ${capitalizeFirstLetter(devolverDivision())}`
-    
+    resetHabilidad()
     await cargarDatos()
     generarOpcionesMapas(allCards, mapas)
     generarOpcionesAgentes(allCards, agentes)
@@ -296,6 +264,7 @@ inputAutor.addEventListener('input', event => {
 vaciarAutor.addEventListener('click', event => {
     inputAutor.value = ''
     inputAutor.dispatchEvent(new Event('input'));
+    inputAutor.focus()
 })
 // vaciarAutor.style.display = 'none'
 //     aplicarFiltros()
@@ -325,6 +294,9 @@ function generarCards(cards, agentes, mapas) {
     // localStorage.getItem('division')
     if (division === "agente") {
         agentes.map(agente => {
+            // cards.map(card =>  {
+            //     if(card.mapa === "mapa no definido") card.mapa = ""
+            // })
             const cardsDe1Agente = cards.filter(card => card.agente === agente.nombre)
             cardsDe1Agente.sort((a, b) => a.mapa.localeCompare(b.mapa))
             if (cardsDe1Agente.length > 0) {
@@ -332,12 +304,16 @@ function generarCards(cards, agentes, mapas) {
                 <div class="card-container" id="${agente.nombre}-container"></div>`
                 const agenteContainer = document.getElementById(`${agente.nombre}-container`)
                     cardsDe1Agente.map((card, index) => {
+                        let mapHtml = ''
+                        if (card.mapSrc && card.mapSrc.trim() !== '') {
+                            mapHtml = `<img class="map" src="${card.mapSrc}" loading="lazy">`
+                        }
                         let cardHtml = `<article class="card">
                                 <p class="title">
                                     <span class="title-num">${index + 1}</span>
                                     <span class="title-text">${card.mapa.toUpperCase()}</span>
                                 </p>
-                                <img class="map" src="${card.mapSrc}" loading="lazy">
+                                ${mapHtml}
                                 <img class="pov" src="${card.povSrc}" loading="lazy">
                                 <span class="title-text-user">${card.titleText}</span>
                                 <p class="desc">${card.desc}</p>
@@ -353,6 +329,9 @@ function generarCards(cards, agentes, mapas) {
     } else {
         if (division === "mapa") {
             mapas.map(mapa => {
+                // cards.map(card =>  {
+                //     if(card.mapa === "") card.mapa = "mapa no definido"
+                // })
                 const cardsDe1Mapa = cards.filter(card => card.mapa === mapa.nombre)
                 cardsDe1Mapa.sort((a, b) => a.agente.localeCompare(b.agente))
                 if (cardsDe1Mapa.length > 0) {
@@ -360,13 +339,17 @@ function generarCards(cards, agentes, mapas) {
                         <div class="card-container" id="${mapa.nombre}-container"></div>`
                     const mapaContainer = document.getElementById(`${mapa.nombre}-container`)
                     cardsDe1Mapa.map((card, index) => {
+                        let mapHtml = ''
+                        if (card.mapSrc && card.mapSrc.trim() !== '') {
+                            mapHtml = `<img class="map" src="${card.mapSrc}" loading="lazy">`
+                        }
                         let cardHtml = `<article class="card">
                                 <p class="title">
                                     <span class="title-num">${index + 1}</span>
                                     <span class="title-text">${card.agente.toUpperCase()}</span>
                                 </p>
-                                <img class="map" src="${card.mapSrc}">
-                                <img class="pov" src="${card.povSrc}">
+                                ${mapHtml}
+                                <img class="pov" src="${card.povSrc}" loading="lazy">
                                 <span class="title-text-user">${card.titleText}</span>
                                 <p class="desc">${card.desc}</p>
                                <div class="firma">

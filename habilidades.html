@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Breac-html | Habilidades</title>
+    <title>ClutchBoard | Galeria</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="styles.css">
@@ -12,85 +12,95 @@
 </head>
 
 <body>
+    <header>
+        <nav>
+            <a class="main_title" href="index.html">
+                <h1 class="home-navbar" style="color: rgb(189, 99, 47); font-weight: 700;">ClutchBoard</h1>
+            </a>
+            <a class="navbar-link" href="index.html">Home</a>
+            <a style="text-decoration: underline;" class="navbar-link" href="habilidades.html">Galeria</a>
+            <a class="navbar-link" href="crear.html">Crear</a>
+        </nav>
+    </header>
+    <main>
+        <p class="primerElemento">Este es nuestro repertorio de jugadas (poné el cursor en un <span
+                style="color:#BD632F;; font-weight: 570;">mapa</span> para agrandarlo). Si te interesa, podés <a
+                class="mi-link" href="crear.html">crear</a> tu propio artículo para que cualquiera pueda
+            aprender tu jugada</p>
+        <form id="form-hb">
+            <div class="max-filter-container" id="max-filter-container">
+                <div class="filter-search-container">
+                    <div name="para q no haya gap" style="display: flex; flex-direction:row;">
+                                <button onclick="vaciarInput(false)" type="button" class="icon-filter-button"><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                        class="bi bi-trash-fill" id="basura" viewBox="1.7 0 16 14.4">
+                                        <path
+                                            d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                                    </svg></button>
+                                <div class="filter-container">
+                                    <label class="filter-label">Filtros</label>
+                                    <label class="checkbox-label"
+                                        style="color: #D8C99B; font-size: 1rem; display: flex; align-items: center; user-select: none;">
+                                        <input type="checkbox" id="comp-input-form-hb">
+                                        <span class="custom-checkbox"></span>
+                                        Rotación competitiva
 
-    <nav>
-        <a class="main_title" href="index.html">
-            <h1 class="home-navbar" style="color: rgb(189, 99, 47); font-weight: 700;">Breac-html</h1>
-        </a>
-        <a class="navbar-link" href="index.html">Home</a>
-        <a style="text-decoration: underline;" class="navbar-link" href="habilidades.html">Habilidades</a>
-        <a class="navbar-link" href="crear.html">Crear</a>
-    </nav>
-
-    <p>Este es nuestro repertorio de habilidades (poné el cursor en un <span
-            style="color:#BD632F;; font-weight: 570;">mapa</span> para agrandarlo). Si te interesa, podés <a
-            class="mi-link" href="crear.html">crear</a> tu propio artículo para que cualquiera pueda
-        aprender tu jugada</p>
-    <form id="form-hb">
-        <div class="max-filter-container" id="max-filter-container">
-
-            <div class="filter-search-container">
-                <div name="para q no haya gap" style="display: flex; flex-direction:row;">
-                    <button onclick="vaciarInput(false)" type="button" class="icon-filter-button"><svg
-                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                            class="bi bi-trash-fill" id="basura" viewBox="1.7 0 16 14.4">
-                            <path
-                                d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
-                        </svg></button>
-                    <div class="filter-container">
-                        <label class="filter-label">Filtros</label>
-                        <label class="checkbox-label"
-                            style="color: #D8C99B; font-size: 1rem; display: flex; align-items: center; user-select: none;">
-                            <input type="checkbox" id="comp-input-form-hb">
-                            <span class="custom-checkbox"></span>
-                            Rotación competitiva
-
-                        </label>
-                        <!-- <div class="select-filter-container"> -->
-                            <select name="mapa-input-form-hb" id="mapa-input-form-hb">
-                                <option value="">Elige un mapa</option>
-                            </select>
-                            <select name="agente-input-form-hb" id="agente-input-form-hb">
-                                <option value="">Elige un agente</option>
-                            </select>
-                            <select name="habilidad-input-form-hb" id="habilidad-input-form-hb">
-                                <option value="">Elige una habilidad</option>
-                            </select>
-                        <!-- </div> -->
+                                    </label>
+                                    <!-- <div class="select-filter-container"> -->
+                                        <select name="mapa-input-form-hb" id="mapa-input-form-hb">
+                                            <option value="">Elige un mapa</option>
+                                        </select>
+                                        <select name="agente-input-form-hb" id="agente-input-form-hb">
+                                            <option value="">Elige un agente</option>
+                                        </select>
+                                        <select name="habilidad-input-form-hb" id="habilidad-input-form-hb">
+                                            <option value="">Elige una habilidad</option>
+                                        </select>
+                                    <!-- </div> -->
+                                </div>
                     </div>
+                    <!-- </div>
+                    </div> -->
+                    <!-- los 2 /divs de aca arriba los puse recién -->
+                    <!-- </form> -->
+                    <!-- el form de aca arriba lo muevo para abajo -->
+
+                    <div class="search-container">
+                        <label class="filter-label" style="color: #D8C99B; display: flex; align-items: center;">Autor</label>
+                        <div class="input-wrapper">
+                            <input id="autor-input-form-hb" type="text" autocomplete="off" class="input-form-hb" placeholder="ej.: domix">
+                            <button class="vaciar-autor-button" id="vaciar-autor" tabindex="-1"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="4.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" />
+                            </svg></button>
+                        </div>
+                    </div>
+                    <!-- filter-serach-container: -->
                 </div>
-            <!-- </div>
-        </div> -->
-        <!-- los 2 /divs de aca arriba los puse recién -->
-    <!-- </form> -->
-    <!-- el form de aca arriba lo muevo para abajo -->
+                <div class="ordenar-container">
+                    <label class="filter-label" style="color: #D8C99B; display: flex; align-items: center;">Ordenando por</label>
+                    <button class="ordenarBtn" id="ordenar-btn" type="button"></button>
+                </div>
 
-    <div class="search-container">
-        <label class="filter-label" style="color: #D8C99B; display: flex; align-items: center;">Autor</label>
-        <div class="input-wrapper">
-            <input id="autor-input-form-hb" type="text" autocomplete="off" class="input-form-hb" placeholder="ej.: domix">
-            <button class="vaciar-autor-button" id="vaciar-autor" tabindex="-1"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="4.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" />
-            </svg></button>
+            </div>
+        </form>
+        <div id="maxContainer">
+            <div class="cargandoContainer">
+                <div class="spinnerHb"></div>
+                <h2>Cargando...</h2>
+            </div>
         </div>
-    </div>
-    <!-- filter-serach-container: -->
-    </div>
-    <div class="ordenar-container">
-        <label class="filter-label" style="color: #D8C99B; display: flex; align-items: center;">Ordenando por</label>
-        <button class="ordenarBtn" id="ordenar-btn" type="button"></button>
-    </div>
 
-    </div>
-</form>
-    <div id="maxContainer">
-        <div class="cargandoContainer">
-            <div class="spinnerHb"></div>
-            <h2>Cargando...</h2>
-        </div>
-    </div>
-
-    <p id="p"></p>
-
+        <p id="p"></p>
+    </main>
+    <footer>
+        <h1>Encontrame:</h1>
+        <ul>
+            <li><span style="font-style: italic;">dami64</span> en Discord</li>
+            <li><a href="mailto:damian.cym05@gmail.com" class="footer-link">damiancym05@gmail.com</a></li>
+            <li><a href="https://github.com/damicym" target="_blank" class="footer-link">damicym en Github</a></li>
+            <li><a class="footer-link" href="https://tracker.gg/valorant/profile/riot/domix%23640/overview?platform=pc&playlist=competitive" target="_blank">domix#640 en Valorant Tracker</a></li>
+            <li><a class="footer-link" target="_blank" href="https://github.com/damicym/breac-html_v3">Repositorio de ClutchBoard</a></li>
+        </ul>
+    </footer>
     <script src="habilidades.js"></script>
 </body>
 </html>
