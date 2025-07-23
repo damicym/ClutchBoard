@@ -20,10 +20,18 @@
         </nav>
     </header>
     <main>
-        <h3 class="primerElemento"><span style="color: rgb(189, 99, 47); margin-left: 10px;" >Enterate</span> de las mejores jugadas de la comunidad de Valorant y <span style="color: rgb(189, 99, 47);" >compartí</span> las tuyas para que cualquiera las ponga en práctica</h1>
+        <h3 class="primerElemento">
+            <span style="color: rgb(189, 99, 47); margin-left: 10px;" class="wave-text">
+            <span>E</span><span>n</span><span>t</span><span>e</span><span>r</span><span>a</span><span>t</span><span>e</span>
+            </span> 
+            de las mejores jugadas de la comunidad de Valorant y 
+            <span style="color: rgb(189, 99, 47);" class="wave-text">
+                <span>c</span><span>o</span><span>m</span><span>p</span><span>a</span><span>r</span><span>t</span><span>í</span>
+            </span> 
+            las tuyas para que cualquiera las ponga en práctica</h1>
         <h2 class="mapa-titulo">¿Quién soy?</h2>
         <section class="card-container">
-            <article class="card">
+            <article class="card hover-up">
                 <p class="title">
                     <span class="title-num">1</span>
                     <span class="title-text">Mi recorrido por Valorant</span>
@@ -38,7 +46,7 @@
                     <span class="autor">Ascendant me tiene miedo</span>
                 </div>
             </article>
-            <article class="card">
+            <article class="card hover-up">
                 <p class="title">
                     <span class="title-num">2</span>
                     <span class="title-text">Estadísticas</span>
@@ -53,7 +61,7 @@
                     <span class="autor">Mi hobby es tirarle aftershocks a sovas droneando</span>
                 </div>
             </article>
-            <article class="card">
+            <article class="card hover-up">
                 <p class="title">
                     <span class="title-num">3</span>
                     <span class="title-text">ClutchBoard</span>
@@ -80,33 +88,10 @@
             <li><a class="footer-link" target="_blank" href="https://github.com/damicym/breac-html_v3">Repositorio de ClutchBoard</a></li>
         </ul>
     </footer>
-    
-
-
-    <!-- <h2 style="margin-left: 10px;">Acerca de</h2>
-    <p>Bienvenido a <span style="color: rgb(189, 99, 47);" ><b>ClutchBoard</b></span>: la página web de un main breach, donde vas a poder enterarte de buenos tips y compartir los tuyos con otras personas</p> -->
-    <!-- <h2 style="margin-left: 10px;">¿Quién soy?</h2>
-    <ul style="font-size: large;">
-        <li>Soy Domix, y juego <span style="color: rgb(164, 36, 59);" ><b>Valorant</b></span> desde 2021</li>
-        <li>Empecé en hierro siendo main Omen y Raze, pero me volví main Breach cuando llegué a <span style="color: rgb(27, 111, 190);" ><b>Platino</b></span></li>
-        <li>Alcancé mi peak elo <span style="color: rgb(89, 23, 151);" ><b>(Diamante 3)</b></span> jugando 48% de mis partidas con Breach</li>
-        <li>Haciendo honor a mi personaje, soy imparable con la Odin en <span style="color: rgb(189, 99, 47);" ><b>Bind</b></span></li>
-    </ul>
-
-    <h2 style="margin-left: 10px;">Estadísticas</h2>
-    <ul style="font-size: large;">
-        <li>Este es mi 
-            <a class="mi-link" target="_blank" href="https://tracker.gg/valorant/profile/riot/LAC%20Domix%23640/overview">
-                Tracker
-            </a>
-        </li>
-        <li>Tengo <span style="color: rgb(164, 36, 59);" ><b>454</b></span> horas con Breach en competitivo</li>
-        <li>Breach fue mi top agente durante <span style="color: rgb(27, 111, 190);" ><b>7 actos</b></span> seguidos</li>
-        <li>Tengo un promedio de <span style="color: rgb(21, 131, 21);" ><b>70% de KAST</b></span> y me caracterizo por sumar muchas <span style="color: rgb(21, 131, 21);" ><b>asistencias</b></span></li>
-    </ul>
-    
-    <br>
-    <img style="max-width: 90vw; height: 180px; border: 5px solid rgb(164, 36, 59);" src="https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data/39d339b3de35f47fb0bc4bb295a9dc4aa07eeb55-5120x1772.png?auto=format&fit=fill&q=80&w=1082">
-    <p>Mi repo: <a target="_blank" class="mi-link" href="https://github.com/damicym/breac-html">github.com/damicym/breac-html</a></p> -->
+    <script>
+        document.querySelectorAll('.wave-text span').forEach((el, i) => {
+            el.style.setProperty('--i', i)
+        })
+    </script>
 </body>
 </html>

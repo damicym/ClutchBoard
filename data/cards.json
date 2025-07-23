@@ -25,7 +25,7 @@
         "titleText": "Rush rampa",
         "mapSrc": "./images/split_3_flash_map.png",
         "povSrc": "./images/split_3_flash_pov.png",
-        "desc": "Esta flash es muy buena para cuando haya que ganar main antes de pasar al site, o para rushear rampa. La podés acompañar con aftershor o un stunt",
+        "desc": "Esta flash es muy buena para cuando haya que ganar main antes de pasar al site, o para rushear rampa. La podés acompañar con aftershor o un stun",
         "nombre": "Domix",
         "fecha": "2025-02-12T06:35:00.000",
         "mapa": "split",
@@ -36,23 +36,23 @@
         "titleText": "Strongholdear main de A split",
         "mapSrc": "./images/split_4_stunt_map.png",
         "povSrc": "./images/split_4_stunt_pov.png",
-        "desc": "Si ves en el minimapa que están pasando rampa, o si te callean que hay mucho ruido en main, podés tirar este stunt para frenar el push a rampa y aún así stuntear a la gente que todavía está en main. Después de tu stunt deberías callearle a tus compañeros que peekeen main",
+        "desc": "Si ves en el minimapa que están pasando rampa, o si te callean que hay mucho ruido en main, podés tirar este stun para frenar el push a rampa y aún así stunear a la gente que todavía está en main. Después de tu stun deberías callearle a tus compañeros que peekeen main",
         "nombre": "Domix",
         "fecha": "2025-02-12T06:38:00.000",
         "mapa": "split",
         "agente": "breach",
-        "habilidad": "stunt"
+        "habilidad": "stun"
     },
     {
         "titleText": "Agresiva main de B abyss",
         "mapSrc": "./images/abyss_1_stunt_map.png",
         "povSrc": "./images/abyss_1_stunt_pov.png",
-        "desc": "Con este stunt podés rushear site con tu jett. Le calleas que tire updraft y dash hacia heaven y vos la acompañás abajo con una flash",
+        "desc": "Con este stun podés rushear site con tu jett. Le calleas que tire updraft y dash hacia heaven y vos la acompañás abajo con una flash",
         "nombre": "Domix",
         "fecha": "2025-02-12T06:40:00.000",
         "mapa": "abyss",
         "agente": "breach",
-        "habilidad": "stunt"
+        "habilidad": "stun"
     },
     {
         "titleText": "Flash para entry A abyss",
@@ -80,12 +80,12 @@
         "titleText": "Correr corta inicio de ronda",
         "mapSrc": "./images/heaven_2_stunt_map.png",
         "povSrc": "./images/heaven_2_stunt_pov.png",
-        "desc": "Este stunt es muy bueno para cuando los enemigos suelen campear en corta con escopeta. Deberías callearle a tu dueslista el stunt y que el pushee corta",
+        "desc": "Este stun es muy bueno para cuando los enemigos suelen campear en corta con escopeta. Deberías callearle a tu dueslista el stun y que el pushee corta",
         "nombre": "Domix",
         "fecha": "2025-02-12T06:47:00.000",
         "mapa": "heaven",
         "agente": "breach",
-        "habilidad": "stunt"
+        "habilidad": "stun"
     },
     {
         "titleText": "Aftershock al sova",

@@ -3,7 +3,7 @@
         "nombre": "astra",
         "habilidades": {    
             "h1": "pull",
-            "h2": "stunt",
+            "h2": "stun",
             "h3": "smoke",
             "h4": "ulti"
         }
@@ -13,7 +13,7 @@
         "habilidades": {    
             "h1": "aftershock",
             "h2": "flash",
-            "h3": "stunt",
+            "h3": "stun",
             "h4": "ulti"
         }
     },
@@ -130,7 +130,7 @@
         "nombre": "neon",
         "habilidades": {    
             "h1": "wall",
-            "h2": "stunt",
+            "h2": "stun",
             "h3": "dash (run)",
             "h4": "ulti"
         }
@@ -202,7 +202,7 @@
         "nombre": "tejo",
         "habilidades": {    
             "h1": "drone",
-            "h2": "stunt",
+            "h2": "stun",
             "h3": "missiles",
             "h4": "ulti"
         }
