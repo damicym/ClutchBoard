@@ -55,7 +55,7 @@ async function main() {
     ${capitalizeFirstLetter(devolverDivision())}`
     resetHabilidad()
     await cargarDatosLocales()
-    mensajeBajoFiltros('loading', 'No estás viendo todos los artículos: podrian tardar 50s en cargar los artículos del servidor')
+    mensajeBajoFiltros('loading', 'No estás viendo todos los artículos: podrían tardar 50s en cargar los artículos del servidor')
     generarOpcionesMapas(allCards, mapas)
     generarOpcionesAgentes(allCards, agentes)
     generarCards(cardsActuales, agentes, mapas)
@@ -130,6 +130,7 @@ async function cargarDatosAPI(){
         }})
         if(!responseDbCards.ok) throw new Error('response not ok')
         dbCards = await responseDbCards.json()
+        mensajeBajoFiltros('esconder', '')
     } catch (err){
         console.log('Error al cargar artículos del servidor: ' + err)
         mensajeBajoFiltros('error', 'No estás viendo todos los artículos: hubo un error al cargar los artículos del servidor')
@@ -147,10 +148,12 @@ function mensajeBajoFiltros(status, msg) {
         ${msg}`
         mensajeElemento.style.color = 'var(--color1)'
     }
-    else {
+    else if(status === 'loading'){
         mensajeElemento.innerHTML = `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 6l0 -3" /><path d="M16.25 7.75l2.15 -2.15" /><path d="M18 12l3 0" /><path d="M16.25 16.25l2.15 2.15" /><path d="M12 18l0 3" /><path d="M7.75 16.25l-2.15 2.15" /><path d="M6 12l-3 0" /><path d="M7.75 7.75l-2.15 -2.15" /></svg>
         ${msg}`
         mensajeElemento.style.color = 'var(--color5)'
+    } else{
+        mensajeElemento.style.display = 'none'
     }
     mensajeElemento.className = 'mensajeBajoFiltros'
     mensajeElemento.style.display = 'flex'
