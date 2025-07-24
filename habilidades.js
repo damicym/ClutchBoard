@@ -58,9 +58,8 @@ async function main() {
     mensajeBajoFiltros('loading', 'No estás viendo todos los artículos: podrían tardar 50s en cargar los artículos del servidor')
     generarOpcionesMapas(allCards, mapas)
     generarOpcionesAgentes(allCards, agentes)
-    generarCards(cardsActuales, agentes, mapas)
-    await cargarDatosAPI()
-    generarCards(cardsActuales, agentes, mapas)
+    generarCards(cardsActuales, agentes, mapas, true)
+    await cargarDatosApiYAplicarFiltros()
 }
 function devolverDivision(){
     if(!localStorage.getItem('division')) localStorage.setItem('division', "mapa")
@@ -79,7 +78,7 @@ ordenarBtn.addEventListener('click', () => {
         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-transfer-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 4v16l-6 -5.5" /><path d="M14 20v-16l6 5.5" /></svg>
     ${capitalizeFirstLetter(division)}`
     localStorage.setItem('division', division)
-    generarCards(cardsActuales, agentes, mapas)
+    generarCards(cardsActuales, agentes, mapas, false)
 })
 // mapasLocales, agentesLocales, cardsLocales, cardsBd (si quiero hacer por separado)
 async function cargarDatosLocales() {
@@ -123,7 +122,7 @@ async function cargarDatosLocales() {
     //     else allCards = localCards
     // cardsActuales = allCards
 }
-async function cargarDatosAPI(){
+async function cargarDatosApiYAplicarFiltros(){
     try{
         const responseDbCards = await fetch(`${API_URL}/cards`, { method: 'GET', headers: {
             'Content-Type': 'application/json'
@@ -147,16 +146,17 @@ function mensajeBajoFiltros(status, msg) {
         mensajeElemento.innerHTML = `<svg  xmlns="http://www.w3.org/2000/svg"  width="21"  height="21"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-alert-triangle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 1.67c.955 0 1.845 .467 2.39 1.247l.105 .16l8.114 13.548a2.914 2.914 0 0 1 -2.307 4.363l-.195 .008h-16.225a2.914 2.914 0 0 1 -2.582 -4.2l.099 -.185l8.11 -13.538a2.914 2.914 0 0 1 2.491 -1.403zm.01 13.33l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007zm-.01 -7a1 1 0 0 0 -.993 .883l-.007 .117v4l.007 .117a1 1 0 0 0 1.986 0l.007 -.117v-4l-.007 -.117a1 1 0 0 0 -.993 -.883z" /></svg>
         ${msg}`
         mensajeElemento.style.color = 'var(--color1)'
+        mensajeElemento.style.display = 'flex'
     }
     else if(status === 'loading'){
         mensajeElemento.innerHTML = `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 6l0 -3" /><path d="M16.25 7.75l2.15 -2.15" /><path d="M18 12l3 0" /><path d="M16.25 16.25l2.15 2.15" /><path d="M12 18l0 3" /><path d="M7.75 16.25l-2.15 2.15" /><path d="M6 12l-3 0" /><path d="M7.75 7.75l-2.15 -2.15" /></svg>
         ${msg}`
         mensajeElemento.style.color = 'var(--color5)'
+        mensajeElemento.style.display = 'flex'
     } else{
         mensajeElemento.style.display = 'none'
     }
     mensajeElemento.className = 'mensajeBajoFiltros'
-    mensajeElemento.style.display = 'flex'
     mensajeElemento.style.marginLeft = '5px'
     maxFilterContainer.after(mensajeElemento)
 }
@@ -315,7 +315,7 @@ function aplicarFiltros() {
     if (inputAgente.value) cardsActuales = cardsActuales.filter(card => card.agente === inputAgente.value)
     if (inputHabilidad.value) cardsActuales = cardsActuales.filter(card => card.habilidad === inputHabilidad.value)
     if (inputAutor.value) cardsActuales = cardsActuales.filter(card => card.nombre.toLowerCase().includes(inputAutor.value.toLowerCase()))
-    generarCards(cardsActuales, agentes, mapas)
+    generarCards(cardsActuales, agentes, mapas, false)
     if (cardsActuales.length === 0) maxContainer.innerHTML += `<div class="no-result">
     <h2 class="mapa-titulo" style="margin-bottom: 10px; color: #BD632F;">No se encontró ningún resultado :(</h2>
     <span class="mi-link" onclick="vaciarInput(true)">Borrar todas las condiciones de búsqueda</span>
@@ -324,8 +324,9 @@ function aplicarFiltros() {
 formHb.addEventListener('submit', event => {
     event.preventDefault()
 })
-function generarCards(cards, agentes, mapas) {
-    maxContainer.innerHTML = ""
+function generarCards(cards, agentes, mapas, cargando) {
+    if(cargando) maxContainer.innerHTML = `<div class="cargandoContainer"><div class="spinnerHb"></div><h2>Cargando...</h2></div>`
+        else maxContainer.innerHTML = ""
     let division = devolverDivision()
     if (division === "agente") {
         const agentesYVacio = [...agentes, {nombre: "", habilidades: { h1: "", h2: "", h3: "", h4: ""}}]
