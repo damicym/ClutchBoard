@@ -54,9 +54,12 @@ async function main() {
     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-transfer-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 4v16l-6 -5.5" /><path d="M14 20v-16l6 5.5" /></svg>
     ${capitalizeFirstLetter(devolverDivision())}`
     resetHabilidad()
-    await cargarDatos()
+    await cargarDatosLocales()
+    mensajeBajoFiltros('loading', 'No estás viendo todos los artículos: podrian tardar 50s en cargar los artículos del servidor')
     generarOpcionesMapas(allCards, mapas)
     generarOpcionesAgentes(allCards, agentes)
+    generarCards(cardsActuales, agentes, mapas)
+    await cargarDatosAPI()
     generarCards(cardsActuales, agentes, mapas)
 }
 function devolverDivision(){
@@ -79,7 +82,7 @@ ordenarBtn.addEventListener('click', () => {
     generarCards(cardsActuales, agentes, mapas)
 })
 // mapasLocales, agentesLocales, cardsLocales, cardsBd (si quiero hacer por separado)
-async function cargarDatos() {
+async function cargarDatosLocales() {
     try{
         const responseMapas = await fetch('data/mapas.json')
         mapas = await responseMapas.json()
@@ -103,7 +106,24 @@ async function cargarDatos() {
     } catch (err){
         console.log('Error al cargar artículos locales: ' + err)
     }
-
+    allCards = localCards
+    cardsActuales = allCards
+    // try{
+    //     const responseDbCards = await fetch(`${API_URL}/cards`, { method: 'GET', headers: {
+    //         'Content-Type': 'application/json'
+    //     }})
+    //     if(!responseDbCards.ok) throw new Error('response not ok')
+    //     dbCards = await responseDbCards.json()
+    // } catch (err){
+    //     console.log('Error al cargar artículos del servidor: ' + err)
+    //     mensajeBajoFiltros('No estás viendo todos los artículos: hubo un error al cargar los artículos del servidor')
+    // }
+    
+    // if(dbCards.length) allCards = [...dbCards, ...localCards]
+    //     else allCards = localCards
+    // cardsActuales = allCards
+}
+async function cargarDatosAPI(){
     try{
         const responseDbCards = await fetch(`${API_URL}/cards`, { method: 'GET', headers: {
             'Content-Type': 'application/json'
@@ -112,18 +132,26 @@ async function cargarDatos() {
         dbCards = await responseDbCards.json()
     } catch (err){
         console.log('Error al cargar artículos del servidor: ' + err)
-        mensajeBajoFiltros('No estás viendo todos los artículos: hubo un error al cargar los artículos del servidor')
+        mensajeBajoFiltros('error', 'No estás viendo todos los artículos: hubo un error al cargar los artículos del servidor')
     }
     
     if(dbCards.length) allCards = [...dbCards, ...localCards]
         else allCards = localCards
-    cardsActuales = allCards
+    aplicarFiltros()
 }
 
-function mensajeBajoFiltros(msg) {
+function mensajeBajoFiltros(status, msg) {
     const mensajeElemento = document.getElementById('p')
-    mensajeElemento.innerHTML = `<svg  xmlns="http://www.w3.org/2000/svg"  width="21"  height="21"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-alert-triangle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 1.67c.955 0 1.845 .467 2.39 1.247l.105 .16l8.114 13.548a2.914 2.914 0 0 1 -2.307 4.363l-.195 .008h-16.225a2.914 2.914 0 0 1 -2.582 -4.2l.099 -.185l8.11 -13.538a2.914 2.914 0 0 1 2.491 -1.403zm.01 13.33l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007zm-.01 -7a1 1 0 0 0 -.993 .883l-.007 .117v4l.007 .117a1 1 0 0 0 1.986 0l.007 -.117v-4l-.007 -.117a1 1 0 0 0 -.993 -.883z" /></svg>
-    ${msg}`
+    if(status === 'error') {
+        mensajeElemento.innerHTML = `<svg  xmlns="http://www.w3.org/2000/svg"  width="21"  height="21"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-alert-triangle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 1.67c.955 0 1.845 .467 2.39 1.247l.105 .16l8.114 13.548a2.914 2.914 0 0 1 -2.307 4.363l-.195 .008h-16.225a2.914 2.914 0 0 1 -2.582 -4.2l.099 -.185l8.11 -13.538a2.914 2.914 0 0 1 2.491 -1.403zm.01 13.33l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007zm-.01 -7a1 1 0 0 0 -.993 .883l-.007 .117v4l.007 .117a1 1 0 0 0 1.986 0l.007 -.117v-4l-.007 -.117a1 1 0 0 0 -.993 -.883z" /></svg>
+        ${msg}`
+        mensajeElemento.style.color = 'var(--color1)'
+    }
+    else {
+        mensajeElemento.innerHTML = `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-loader"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 6l0 -3" /><path d="M16.25 7.75l2.15 -2.15" /><path d="M18 12l3 0" /><path d="M16.25 16.25l2.15 2.15" /><path d="M12 18l0 3" /><path d="M7.75 16.25l-2.15 2.15" /><path d="M6 12l-3 0" /><path d="M7.75 7.75l-2.15 -2.15" /></svg>
+        ${msg}`
+        mensajeElemento.style.color = 'var(--color5)'
+    }
     mensajeElemento.className = 'mensajeBajoFiltros'
     mensajeElemento.style.display = 'flex'
     mensajeElemento.style.marginLeft = '5px'

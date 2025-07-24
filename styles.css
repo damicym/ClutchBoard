@@ -915,7 +915,7 @@ input[type="checkbox"]:checked~.custom-checkbox::after {
     position: relative;
 }
 .mensajeBajoFiltros{
-    color: var(--color1);
+    color: var(--color5);
     /* display: flex; */
     align-items: center;
     gap: 2px;
