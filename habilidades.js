@@ -105,7 +105,10 @@ async function cargarDatos() {
     }
 
     try{
-        const responseDbCards = await fetch(`${API_URL}/cards`, { method: 'GET' })
+        const responseDbCards = await fetch(`${API_URL}/cards`, { method: 'GET', headers: {
+            'Content-Type': 'application/json'
+        }})
+        if(!responseDbCards.ok) throw new Error('response not ok')
         dbCards = await responseDbCards.json()
     } catch (err){
         console.log('Error al cargar artículos del servidor: ' + err)
