@@ -793,6 +793,9 @@ h4 {
     .navbar-link {
         font-size: 1.3rem;
     }
+    #maxContainer{
+        margin-top: 40px;
+    }
 }
 
 @media screen and (max-width: 500px) {

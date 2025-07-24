@@ -55,7 +55,7 @@ async function main() {
     ${capitalizeFirstLetter(devolverDivision())}`
     resetHabilidad()
     await cargarDatosLocales()
-    mensajeBajoFiltros('loading', 'No estás viendo todos los artículos: podrían tardar 50s en cargar los artículos del servidor')
+    mensajeBajoFiltros('loading', 'No estás viendo todos los artículos: los artículos del servidor podrían tardar hasta 50s en cargar')
     generarOpcionesMapas(allCards, mapas)
     generarOpcionesAgentes(allCards, agentes)
     generarCards(cardsActuales, agentes, mapas, true)
