@@ -112,7 +112,7 @@ async function cargarDatos() {
         mensajeBajoFiltros('No estás viendo todos los artículos: hubo un error al cargar los artículos del servidor')
     }
     
-    if(dbCards) allCards = [...dbCards, ...localCards]
+    if(dbCards.length) allCards = [...dbCards, ...localCards]
         else allCards = localCards
     cardsActuales = allCards
 }
