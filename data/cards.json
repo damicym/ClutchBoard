@@ -5,7 +5,7 @@
         "povSrc": "./images/split_1_aft_pov.png",
         "desc": "Cuando escuches a alguien bajar la cuerda o tirarse a vents, este aftershock te va a regalar una kill o lo va a obligar a volver a subir rapidamente",
         "nombre": "Domix",
-        "fecha": "2025-02-12T06:28:00.000",
+        "fecha": "2025-01-28T18:04:00.000",
         "mapa": "split",
         "agente": "breach",
         "habilidad": "aftershock"
@@ -16,7 +16,7 @@
         "povSrc": "./images/split_2_aft_pov.png",
         "desc": "Cuando escuches que la Skye tire perro inicio de ronda, esperá medio segundo y tirale este aftershock, no hay chance de que sobreviva. Después entra a torre para que no te peekeen desde main",
         "nombre": "Domix",
-        "fecha": "2025-02-12T06:31:00.000",
+        "fecha": "2025-01-28T18:07:00.000",
         "mapa": "split",
         "agente": "breach",
         "habilidad": "aftershock"
@@ -27,7 +27,7 @@
         "povSrc": "./images/split_3_flash_pov.png",
         "desc": "Esta flash es muy buena para cuando haya que ganar main antes de pasar al site, o para rushear rampa. La podés acompañar con aftershor o un stun",
         "nombre": "Domix",
-        "fecha": "2025-02-12T06:35:00.000",
+        "fecha": "2025-01-28T18:11:00.000",
         "mapa": "split",
         "agente": "breach",
         "habilidad": "flash"
@@ -38,7 +38,7 @@
         "povSrc": "./images/split_4_stunt_pov.png",
         "desc": "Si ves en el minimapa que están pasando rampa, o si te callean que hay mucho ruido en main, podés tirar este stun para frenar el push a rampa y aún así stunear a la gente que todavía está en main. Después de tu stun deberías callearle a tus compañeros que peekeen main",
         "nombre": "Domix",
-        "fecha": "2025-02-12T06:38:00.000",
+        "fecha": "2025-01-28T18:15:00.000",
         "mapa": "split",
         "agente": "breach",
         "habilidad": "stun"
@@ -49,7 +49,7 @@
         "povSrc": "./images/abyss_1_stunt_pov.png",
         "desc": "Con este stun podés rushear site con tu jett. Le calleas que tire updraft y dash hacia heaven y vos la acompañás abajo con una flash",
         "nombre": "Domix",
-        "fecha": "2025-02-12T06:40:00.000",
+        "fecha": "2025-01-31T13:42:00.000",
         "mapa": "abyss",
         "agente": "breach",
         "habilidad": "stun"
@@ -60,7 +60,7 @@
         "povSrc": "./images/abyss_2_flash_pov.png",
         "desc": "Es importante maximizar la cantidad de enemigos flasheados para el entry, y con esta flash vas a cegar a los de backsite a la izquierda y a la derechea, y al de heaven",
         "nombre": "Domix",
-        "fecha": "2025-02-12T06:42:00.000",
+        "fecha": "2025-01-31T13:45:00.000",
         "mapa": "abyss",
         "agente": "breach",
         "habilidad": "flash"
@@ -71,7 +71,7 @@
         "povSrc": "./images/heaven_1_aft_pov.png",
         "desc": "Perfecto para cyphers camperos o para después de flashear a la op, que probablemente se esconda ahí",
         "nombre": "Domix",
-        "fecha": "2025-02-12T06:44:00.000",
+        "fecha": "2025-02-03T10:14:00.000",
         "mapa": "heaven",
         "agente": "breach",
         "habilidad": "aftershock"
@@ -82,7 +82,7 @@
         "povSrc": "./images/heaven_2_stunt_pov.png",
         "desc": "Este stun es muy bueno para cuando los enemigos suelen campear en corta con escopeta. Deberías callearle a tu dueslista el stun y que el pushee corta",
         "nombre": "Domix",
-        "fecha": "2025-02-12T06:47:00.000",
+        "fecha": "2025-02-03T10:17:00.000",
         "mapa": "heaven",
         "agente": "breach",
         "habilidad": "stun"
@@ -93,9 +93,31 @@
         "povSrc": "./images/heaven_3_aft_pov.png",
         "desc": "Con este aftershock vas a poder matar fácilmente al sova meientras dronea, el birm mientras pone humos, etc, pero además vas a obligar a todos los que estén cerca a exponerse a site",
         "nombre": "Domix",
-        "fecha": "2025-02-12T06:49:00.000",
+        "fecha": "2025-02-03T10:19:00.000",
         "mapa": "heaven",
         "agente": "breach",
         "habilidad": "aftershock"
+    },
+    {
+        "titleText": "Flecha desde B para site de A",
+        "mapSrc": "./images/ascent_1_recon_map.png",
+        "povSrc": "./images/ascent_1_recon_pov.png",
+        "desc": "Con 2 cargas y 0 rebotes, desde la punta de la caja verde de site de B mirando a la punta de un techo. Perfecto para tirar antes de rotar y ayudar a frenar el rush enemigo",
+        "nombre": "Domix",
+        "fecha": "2025-07-23T22:51:00.000",
+        "mapa": "ascent",
+        "agente": "sova",
+        "habilidad": "recon bolt"
+    },
+     {
+        "titleText": "Cámara para ver mid atacando",
+        "mapSrc": "./images/ascent_2_cam_map.png",
+        "povSrc": "./images/ascent_2_cam_pov.png",
+        "desc": "Con esta cámara vas a poder ver la rotacion y peeks enemigos de mid. La posicionás saltando y tiene que quedar sobre el tubo de metal mirando hacia árbol",
+        "nombre": "Domix",
+        "fecha": "2025-07-23T23:06:00.000",
+        "mapa": "ascent",
+        "agente": "cypher",
+        "habilidad": "camara"
     }
 ]

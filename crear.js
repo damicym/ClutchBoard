@@ -678,13 +678,12 @@ formCrear.addEventListener('submit', async(event) => {
 
     let resultado = [false, 'Se produjo un error al intentar publicar el artículo']
     resultado = await usarFormObject(formObject)
-    vaciarInput()
-
-    // return [true, `¡Artículo publicado exitosamente en <a class="mi-link" href="habilidades.html">Habilidades</a>!`]
+    
     mostrarToast(resultado[0] ? 'ok' : 'error', resultado[1])
+    if(resultado[0]){
+        vaciarInput()
+        vaciarVariablesGlobales()
+    }
     desHabilitarInputs(true)
-    vaciarVariablesGlobales()
-    resetPovNPreview()
-    resetMapNPreview()
     submitBtn.innerHTML = 'Publicar'
 })
