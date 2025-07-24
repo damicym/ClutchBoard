@@ -934,7 +934,7 @@ input[type="checkbox"]:checked~.custom-checkbox::after {
 }
 
 .card-form-2::after{
-    content: "Compartí tu jugada con respeto y claridad";
+    content: var(--after-text, "Compartí tu jugada con respeto y claridad");
     color: var(--color5);
     margin-top: 10px;
     line-height: 1.22;

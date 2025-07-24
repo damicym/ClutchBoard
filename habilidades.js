@@ -28,6 +28,7 @@ let compMaps = []
 let cardsActuales = []
 let dbCards = []
 let localCards = []
+let cargando = true
 const opcionesfecha = {
     day: '2-digit',
     month: '2-digit',
@@ -58,7 +59,7 @@ async function main() {
     mensajeBajoFiltros('loading', 'No estás viendo todos los artículos: los artículos del servidor podrían tardar hasta 50s en cargar')
     generarOpcionesMapas(allCards, mapas)
     generarOpcionesAgentes(allCards, agentes)
-    generarCards(cardsActuales, agentes, mapas, true)
+    generarCards(cardsActuales, agentes, mapas)
     await cargarDatosApiYAplicarFiltros()
 }
 function devolverDivision(){
@@ -78,7 +79,7 @@ ordenarBtn.addEventListener('click', () => {
         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-transfer-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 4v16l-6 -5.5" /><path d="M14 20v-16l6 5.5" /></svg>
     ${capitalizeFirstLetter(division)}`
     localStorage.setItem('division', division)
-    generarCards(cardsActuales, agentes, mapas, false)
+    generarCards(cardsActuales, agentes, mapas)
 })
 // mapasLocales, agentesLocales, cardsLocales, cardsBd (si quiero hacer por separado)
 async function cargarDatosLocales() {
@@ -137,6 +138,7 @@ async function cargarDatosApiYAplicarFiltros(){
     
     if(dbCards.length) allCards = [...dbCards, ...localCards]
         else allCards = localCards
+    cargando = false
     aplicarFiltros()
 }
 
@@ -315,7 +317,7 @@ function aplicarFiltros() {
     if (inputAgente.value) cardsActuales = cardsActuales.filter(card => card.agente === inputAgente.value)
     if (inputHabilidad.value) cardsActuales = cardsActuales.filter(card => card.habilidad === inputHabilidad.value)
     if (inputAutor.value) cardsActuales = cardsActuales.filter(card => card.nombre.toLowerCase().includes(inputAutor.value.toLowerCase()))
-    generarCards(cardsActuales, agentes, mapas, false)
+    generarCards(cardsActuales, agentes, mapas)
     if (cardsActuales.length === 0) maxContainer.innerHTML += `<div class="no-result">
     <h2 class="mapa-titulo" style="margin-bottom: 10px; color: #BD632F;">No se encontró ningún resultado :(</h2>
     <span class="mi-link" onclick="vaciarInput(true)">Borrar todas las condiciones de búsqueda</span>
@@ -324,7 +326,7 @@ function aplicarFiltros() {
 formHb.addEventListener('submit', event => {
     event.preventDefault()
 })
-function generarCards(cards, agentes, mapas, cargando) {
+function generarCards(cards, agentes, mapas) {
     if(cargando) maxContainer.innerHTML = `<div class="cargandoContainer"><div class="spinnerHb"></div><h2>Cargando...</h2></div>`
         else maxContainer.innerHTML = ""
     let division = devolverDivision()

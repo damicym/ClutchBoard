@@ -24,6 +24,7 @@ const selectMapa = document.getElementById('select-mapa')
 const subirArchivoBtn = document.getElementById('subir-archivo-btn')
 const lengthSpanTitle = document.getElementById('length-span-title')
 const lengthSpanDesc = document.getElementById('length-span-desc')
+const card2 = document.getElementById('card2')
 
 const API_URL = 'https://clutchboard-backend.onrender.com'
 
@@ -675,6 +676,7 @@ formCrear.addEventListener('submit', async(event) => {
                             Cargando...`
    
     // mostrarToast('loading', 'Cargando...')
+    card2.style.setProperty('--after-text', '"Podría tardar hasta 50s en publicarse"');
     const formData = new FormData(event.target)
     const formObject = Object.fromEntries(formData.entries())
 
@@ -688,4 +690,5 @@ formCrear.addEventListener('submit', async(event) => {
     }
     desHabilitarInputs(true)
     submitBtn.innerHTML = 'Publicar'
+    card2.style.setProperty('--after-text', '"Compartí tu jugada con respeto y claridad"');
 })
