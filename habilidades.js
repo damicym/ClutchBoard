@@ -58,7 +58,7 @@ async function main() {
     generarCards(cardsActuales, agentes, mapas)
 }
 function devolverDivision(){
-    if(!localStorage.getItem('division')) localStorage.setItem('division', "agente")
+    if(!localStorage.getItem('division')) localStorage.setItem('division', "mapa")
     return localStorage.getItem('division')
 }
 // inputDivision.addEventListener('change', event => {
@@ -120,6 +120,7 @@ function mensajeBajoFiltros(msg) {
     ${msg}`
     mensajeElemento.className = 'mensajeBajoFiltros'
     mensajeElemento.style.display = 'flex'
+    mensajeElemento.style.marginLeft = '5px'
     maxFilterContainer.after(mensajeElemento)
 }
 
@@ -288,21 +289,23 @@ formHb.addEventListener('submit', event => {
 })
 function generarCards(cards, agentes, mapas) {
     maxContainer.innerHTML = ""
-    let division
-    if (localStorage.getItem('division')) division = localStorage.getItem('division')
-    else division = "agente"
-    // localStorage.getItem('division')
+    let division = devolverDivision()
     if (division === "agente") {
-        agentes.map(agente => {
-            // cards.map(card =>  {
-            //     if(card.mapa === "mapa no definido") card.mapa = ""
-            // })
+        const agentesYVacio = [...agentes, {nombre: "", habilidades: { h1: "", h2: "", h3: "", h4: ""}}]
+        agentesYVacio.map(agente => {
             const cardsDe1Agente = cards.filter(card => card.agente === agente.nombre)
             cardsDe1Agente.sort((a, b) => a.mapa.localeCompare(b.mapa))
             if (cardsDe1Agente.length > 0) {
-                maxContainer.innerHTML += `<h2 class="mapa-titulo">${capitalizeFirstLetter(agente.nombre)}</h2>
-                <div class="card-container" id="${agente.nombre}-container"></div>`
-                const agenteContainer = document.getElementById(`${agente.nombre}-container`)
+                let agenteContainer;
+                if(agente.nombre){
+                    maxContainer.innerHTML += `<h2 class="mapa-titulo">${capitalizeFirstLetter(agente.nombre)}</h2>
+                        <div class="card-container" id="${agente.nombre}-container"></div>`
+                    agenteContainer = document.getElementById(`${agente.nombre}-container`)
+                } else{
+                    maxContainer.innerHTML += `<h2 class="mapa-titulo">Agente no especificado</h2>
+                        <div class="card-container" id="undefined-container"></div>`
+                    agenteContainer = document.getElementById('undefined-container')
+                }
                     cardsDe1Agente.map((card, index) => {
                         let mapHtml = ''
                         if (card.mapSrc && card.mapSrc.trim() !== '') {
@@ -328,16 +331,21 @@ function generarCards(cards, agentes, mapas) {
         })
     } else {
         if (division === "mapa") {
-            mapas.map(mapa => {
-                // cards.map(card =>  {
-                //     if(card.mapa === "") card.mapa = "mapa no definido"
-                // })
+            const mapasYVacio = [...mapas, {nombre: "", compPool: false}]
+            mapasYVacio.map(mapa => {
                 const cardsDe1Mapa = cards.filter(card => card.mapa === mapa.nombre)
                 cardsDe1Mapa.sort((a, b) => a.agente.localeCompare(b.agente))
                 if (cardsDe1Mapa.length > 0) {
-                    maxContainer.innerHTML += `<h2 class="mapa-titulo">${capitalizeFirstLetter(mapa.nombre)}</h2>
-                        <div class="card-container" id="${mapa.nombre}-container"></div>`
-                    const mapaContainer = document.getElementById(`${mapa.nombre}-container`)
+                    let mapaContainer;
+                    if(mapa.nombre){
+                        maxContainer.innerHTML += `<h2 class="mapa-titulo">${capitalizeFirstLetter(mapa.nombre)}</h2>
+                            <div class="card-container" id="${mapa.nombre}-container"></div>`
+                        mapaContainer = document.getElementById(`${mapa.nombre}-container`)
+                    } else{
+                        maxContainer.innerHTML += `<h2 class="mapa-titulo">Mapa no especificado</h2>
+                            <div class="card-container" id="undefined-container"></div>`
+                        mapaContainer = document.getElementById('undefined-container')
+                    }
                     cardsDe1Mapa.map((card, index) => {
                         let mapHtml = ''
                         if (card.mapSrc && card.mapSrc.trim() !== '') {

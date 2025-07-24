@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClutchBoard | Home</title>
+    <title>ClutchBoard | Crear</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" /> -->
@@ -45,21 +45,21 @@
                             id="map-preview" src="./images/map-select.png" class="map" alt="Map Preview">
                     </div>
                 </div>
-                <div>
+                <div style="display: flex;">
                     <!-- este asterisco es usado para ajustar el focus despues de subir una img: -->
                     <span class="ast" id="ast-before-title" tabindex="0" style="outline: none; user-select: none;"><b>*</b></span>
-                    <!-- <div class="form-floating mb-3"> -->
-                        <!-- form-control -->
-                        <input autocomplete="off" name="titleText" id="title" class="input-form-crear-title" type="text" placeholder="Título" required>
-                        <!-- <label for="title">Titulo</label> -->
-                    <!-- </div> -->
+                    <input autocomplete="off" name="titleText" id="title" class="input-form-crear-title" type="text" placeholder="Título" required maxlength="60">
+                    <span id="length-span-title" class="lenghtInput"> <!-- textcontent --> </span>
                 </div>
-                <textarea name="desc" autocomplete="off" class="input-form-crear-desc" type="text" rows="5"
-                    placeholder="Descripción (para qué sirve, cuándo usarla, con qué combearla, qué hacer después de usarla)" id="input-desc"></textarea>
+                <div style="display: flex;">
+                    <textarea name="desc" autocomplete="off" class="input-form-crear-desc" type="text" rows="5" placeholder="Descripción (para qué sirve, cuándo usarla, con qué combearla, qué hacer después de usarla)" 
+                        id="input-desc" maxlength="300"></textarea>
+                    <span id="length-span-desc" class="lenghtInput"> <!-- textcontent --> </span>
+                </div>
                 <div style="margin-top: auto;" class="form-crear-firma">
                     <span class="ast"><b style="user-select: none;">*</b></span>
                     <input autocomplete="off" id="nombre" name="nombre" class="input-form-crear-name" type="text"
-                        placeholder="Tu nombre" required>
+                        placeholder="Tu nombre" required maxlength="30">
                     <span name="fecha" class="form-crear-fecha">• <span id="fecha-hoy"></span></span>
                 </div>
             </div>

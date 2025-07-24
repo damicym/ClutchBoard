@@ -22,13 +22,28 @@ const inputDesc = document.getElementById('input-desc')
 const inputNombre = document.getElementById('nombre')
 const selectMapa = document.getElementById('select-mapa')
 const subirArchivoBtn = document.getElementById('subir-archivo-btn')
+const lengthSpanTitle = document.getElementById('length-span-title')
+const lengthSpanDesc = document.getElementById('length-span-desc')
 
 let povFilePegada = null
 let mapFilePegada = null
 let prevPovObjectURL = null
 let prevMapObjectURL = null
 let datosImportantesSinImgPegada = false
-// let vacio = true
+
+function updateLenghtSpan(input, span){
+    if(input.value.length === input.maxLength) span.style.color = 'var(--color1)'
+    else span.style.color = 'var(--color5)'
+    span.textContent = `${input.value.length}/${input.maxLength}`
+    if(input.value.length && document.activeElement === input) span.style.display = 'flex'
+    else span.style.display = 'none'
+}
+inputTitle.addEventListener('input', () => updateLenghtSpan(inputTitle, lengthSpanTitle));
+inputTitle.addEventListener('focus', () => updateLenghtSpan(inputTitle, lengthSpanTitle));
+inputTitle.addEventListener('blur', () => updateLenghtSpan(inputTitle, lengthSpanTitle));
+inputDesc.addEventListener('input', () => updateLenghtSpan(inputDesc, lengthSpanDesc));
+inputDesc.addEventListener('focus', () => updateLenghtSpan(inputDesc, lengthSpanDesc));
+inputDesc.addEventListener('blur', () => updateLenghtSpan(inputDesc, lengthSpanDesc));
 
 function actualizarEstadoDeDatos(){
     const formData = new FormData(formCrear)
@@ -216,8 +231,12 @@ async function mostrarMenu(menuPrincipal, menuSecundario, e) {
     } else{
         estilarPegarBtnByPermiso(pegarButtonTarget, false)
     }
-    menuPrincipal.style.left = `${e.clientX}px`
     menuPrincipal.style.top = `${e.clientY}px`
+    if (window.innerWidth < 900 && menuPrincipal != mapMenu) {
+        menuPrincipal.style.left = `calc(50% - ${menuPrincipal.offsetWidth / 2}px)`
+    } else{
+        menuPrincipal.style.left = `${e.clientX}px`
+    }
     menuPrincipal.classList.add('abierto')
     menuSecundario.classList.remove('abierto')
 }
