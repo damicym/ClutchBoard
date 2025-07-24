@@ -566,7 +566,7 @@ async function postCard(nuevaCard){
             return [false, data.error]
         } else {
             console.log('Card guardada:', data)
-            return [true, `¡Artículo publicado exitosamente en la <a class="mi-link" href="galeria.html">Galeria</a>!`]
+            return [true, `¡Artículo publicado exitosamente en la <a class="mi-link" href="galeria.html">Galería</a>!`]
         }
     } catch(err){
         console.error('Error al guardar la card:', err)
