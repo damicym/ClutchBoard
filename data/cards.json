@@ -113,7 +113,7 @@
         "titleText": "Cámara para ver mid atacando",
         "mapSrc": "./images/ascent_2_cam_map.webp",
         "povSrc": "./images/ascent_2_cam_pov.webp",
-        "desc": "Con esta cámara vas a poder ver la rotacion y peeks enemigos de mid. La posicionás saltando y tiene que quedar sobre el tubo de metal mirando hacia árbol",
+        "desc": "Con esta cámara vas a poder ver la rotacion y peeks enemigos de mid. La posicionás saltando y tiene que quedar en la pared diagonal para que te de el angulo para marcar al de market",
         "nombre": "Domix",
         "fecha": "2025-07-23T23:06:00.000",
         "mapa": "ascent",
