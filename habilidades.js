@@ -11,6 +11,8 @@ const vaciarAutor = document.getElementById('vaciar-autor')
 const maxFilterContainer = document.getElementById('max-filter-container')
 const ordenarBtn = document.getElementById('ordenar-btn')
 
+const API_URL = 'https://clutchboard-backend.onrender.com'
+
 function capitalizeFirstLetter(val) {
     return String(val).charAt(0).toUpperCase() + String(val).slice(1)
 }
@@ -103,7 +105,7 @@ async function cargarDatos() {
     }
 
     try{
-        const responseDbCards = await fetch('http://localhost:3000/cards', { method: 'GET' })
+        const responseDbCards = await fetch(`${API_URL}/cards`, { method: 'GET' })
         dbCards = await responseDbCards.json()
     } catch (err){
         console.log('Error al cargar artículos del servidor: ' + err)

@@ -25,6 +25,8 @@ const subirArchivoBtn = document.getElementById('subir-archivo-btn')
 const lengthSpanTitle = document.getElementById('length-span-title')
 const lengthSpanDesc = document.getElementById('length-span-desc')
 
+const API_URL = 'https://clutchboard-backend.onrender.com'
+
 let povFilePegada = null
 let mapFilePegada = null
 let prevPovObjectURL = null
@@ -553,7 +555,7 @@ function vaciarInput() {
 
 async function postCard(nuevaCard){
     try{
-        const response = await fetch('http://localhost:3000/cards', {
+        const response = await fetch(`${API_URL}/cards`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(nuevaCard)
