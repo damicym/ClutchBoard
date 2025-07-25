@@ -138,6 +138,8 @@ async function cargarDatosApiYAplicarFiltros(){
     
     if(dbCards.length) allCards = [...dbCards, ...localCards]
         else allCards = localCards
+    generarOpcionesMapas(allCards, mapas)
+    generarOpcionesAgentes(allCards, agentes)
     cargando = false
     aplicarFiltros()
 }
