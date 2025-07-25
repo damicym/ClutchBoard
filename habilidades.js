@@ -166,6 +166,7 @@ function mensajeBajoFiltros(status, msg) {
 }
 
 function generarOpcionesAgentes(cards, agentes) {
+    inputAgente.innerHTML = `<option value="">Elige un agente</option>`
     agentes.forEach(agente => {
         if (allCards.some(card => card.agente === agente.nombre)) {
             var opcion = `<option value="${agente.nombre}">${capitalizeFirstLetter(agente.nombre)}</option>`
@@ -175,6 +176,7 @@ function generarOpcionesAgentes(cards, agentes) {
 }
 
 function generarOpcionesMapas(cards, mapas) {
+    inputMapa.innerHTML = `<option value="">Elige un mapa</option>`
     mapas.forEach(mapa => {
         if (cards.some(card => card.mapa === mapa.nombre)) {
             var opcion = `<option value="${mapa.nombre}">${capitalizeFirstLetter(mapa.nombre)}</option>`
