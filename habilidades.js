@@ -57,8 +57,8 @@ async function main() {
     resetHabilidad()
     await cargarDatosLocales()
     mensajeBajoFiltros('loading', 'No estás viendo todos los artículos: los artículos del servidor podrían tardar hasta 50s en cargar')
-    generarOpcionesMapas(allCards, mapas)
-    generarOpcionesAgentes(allCards, agentes)
+    generarOpcionesMapas(localCards, mapas)
+    generarOpcionesAgentes(localCards, agentes)
     generarCards(cardsActuales, agentes, mapas)
     await cargarDatosApiYAplicarFiltros()
 }
@@ -73,8 +73,9 @@ function devolverDivision(){
 // })
 ordenarBtn.addEventListener('click', () => {
     var division = devolverDivision()
-    if(division === "agente") division = "mapa"
-        else division = "agente"
+    if(division === "mapa") division = "agente"
+        // else if(division === "agente") division = "fecha"
+            else division = "mapa"
         ordenarBtn.innerHTML = `
         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-transfer-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 4v16l-6 -5.5" /><path d="M14 20v-16l6 5.5" /></svg>
     ${capitalizeFirstLetter(division)}`
@@ -138,12 +139,30 @@ async function cargarDatosApiYAplicarFiltros(){
     
     if(dbCards.length) allCards = [...dbCards, ...localCards]
         else allCards = localCards
-    generarOpcionesMapas(allCards, mapas)
-    generarOpcionesAgentes(allCards, agentes)
+    agregarOpcionesMapas(dbCards, mapas)
+    agregarOpcionesAgentes(dbCards, agentes)
     cargando = false
     aplicarFiltros()
 }
-
+// si lo hago asi nomas se repiten. poner if nomas
+function agregarOpcionesMapas(cards, mapas){
+    mapas.forEach(mapa => {
+        const yaExisteOpcion = [...inputMapa.options].some(opt => opt.value === mapa.nombre)
+        if (cards.some(card => card.mapa === mapa.nombre) && !yaExisteOpcion) {
+            var opcion = `<option value="${mapa.nombre}">${capitalizeFirstLetter(mapa.nombre)}</option>`
+            inputMapa.innerHTML += opcion
+        }
+    })
+}
+function agregarOpcionesAgentes(cards, agentes){
+    agentes.forEach(agente => {
+        const yaExisteOpcion = [...inputAgente.options].some(opt => opt.value === agente.nombre)
+        if (cards.some(card => card.agente === agente.nombre) && !yaExisteOpcion) {
+            var opcion = `<option value="${agente.nombre}">${capitalizeFirstLetter(agente.nombre)}</option>`
+            inputAgente.innerHTML += opcion
+        }
+    })
+}
 function mensajeBajoFiltros(status, msg) {
     const mensajeElemento = document.getElementById('p')
     if(status === 'error') {
@@ -168,7 +187,7 @@ function mensajeBajoFiltros(status, msg) {
 function generarOpcionesAgentes(cards, agentes) {
     inputAgente.innerHTML = `<option value="">Elige un agente</option>`
     agentes.forEach(agente => {
-        if (allCards.some(card => card.agente === agente.nombre)) {
+        if (cards.some(card => card.agente === agente.nombre)) {
             var opcion = `<option value="${agente.nombre}">${capitalizeFirstLetter(agente.nombre)}</option>`
             inputAgente.innerHTML += opcion
         }
@@ -414,6 +433,48 @@ function generarCards(cards, agentes, mapas) {
                     })
                 }
             })
+        } else{
+
+            // const mapasYVacio = [...mapas, {nombre: "", compPool: false}]
+            // mapasYVacio.map(mapa => {
+            //     const cardsDe1Mapa = cards.filter(card => card.mapa === mapa.nombre)
+            //     cardsDe1Mapa.sort((a, b) => a.agente.localeCompare(b.agente))
+            //     if (cardsDe1Mapa.length > 0) {
+            //         let mapaContainer;
+            //         if(mapa.nombre){
+            //             maxContainer.innerHTML += `<h2 class="mapa-titulo">${capitalizeFirstLetter(mapa.nombre)}</h2>
+            //                 <div class="card-container" id="${mapa.nombre}-container"></div>`
+            //             mapaContainer = document.getElementById(`${mapa.nombre}-container`)
+            //         } else{
+            //             maxContainer.innerHTML += `<h2 class="mapa-titulo">Mapa no especificado</h2>
+            //                 <div class="card-container" id="undefined-container"></div>`
+            //             mapaContainer = document.getElementById('undefined-container')
+            //         }
+            //         cardsDe1Mapa.map((card, index) => {
+            //             let mapHtml = ''
+            //             if (card.mapSrc && card.mapSrc.trim() !== '') {
+            //                 mapHtml = `<img class="map" src="${card.mapSrc}" loading="lazy">`
+            //             }
+            //             let cardHtml = `<article class="card">
+            //                     <p class="title">
+            //                         <span class="title-num">${index + 1}</span>
+            //                         <span class="title-text">${card.agente.toUpperCase()}</span>
+            //                     </p>
+            //                     ${mapHtml}
+            //                     <img class="pov" src="${card.povSrc}" loading="lazy">
+            //                     <span class="title-text-user">${card.titleText}</span>
+            //                     <p class="desc">${card.desc}</p>
+            //                    <div class="firma">
+            //                         <span class="autor">${card.nombre} •</span>
+                                    
+            //                         <span class="fecha-card">${new Date(card.fecha).toLocaleString('es-ES', opcionesfecha).replace(',', ' •')}</span>
+            //                    </div>
+            //                 </article>`
+            //             mapaContainer.innerHTML += cardHtml
+            //         })
+            //     }
+            // })
+            
         }
     }
 }
