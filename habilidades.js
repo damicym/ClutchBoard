@@ -146,22 +146,34 @@ async function cargarDatosApiYAplicarFiltros(){
 }
 // si lo hago asi nomas se repiten. poner if nomas
 function agregarOpcionesMapas(cards, mapas){
+    const valorActual = inputMapa.value;
     mapas.forEach(mapa => {
-        const yaExisteOpcion = [...inputMapa.options].some(opt => opt.value === mapa.nombre)
-        if (cards.some(card => card.mapa === mapa.nombre) && !yaExisteOpcion) {
-            var opcion = `<option value="${mapa.nombre}">${capitalizeFirstLetter(mapa.nombre)}</option>`
-            inputMapa.innerHTML += opcion
+        const yaExiste = [...inputMapa.options].some(opt => opt.value === mapa.nombre)
+        const hayCards = cards.some(card => card.mapa === mapa.nombre)
+        
+        if (hayCards && !yaExiste) {
+            const opcion = document.createElement('option')
+            opcion.value = mapa.nombre
+            opcion.textContent = capitalizeFirstLetter(mapa.nombre)
+            inputMapa.appendChild(opcion)
         }
     })
+    inputMapa.value = valorActual
 }
 function agregarOpcionesAgentes(cards, agentes){
+    const valorActual = inputAgente.value;
     agentes.forEach(agente => {
-        const yaExisteOpcion = [...inputAgente.options].some(opt => opt.value === agente.nombre)
-        if (cards.some(card => card.agente === agente.nombre) && !yaExisteOpcion) {
-            var opcion = `<option value="${agente.nombre}">${capitalizeFirstLetter(agente.nombre)}</option>`
-            inputAgente.innerHTML += opcion
+        const yaExiste = [...inputAgente.options].some(opt => opt.value === agente.nombre)
+        const hayCards = cards.some(card => card.agente === agente.nombre)
+        
+        if (hayCards && !yaExiste) {
+            const opcion = document.createElement('option')
+            opcion.value = agente.nombre
+            opcion.textContent = capitalizeFirstLetter(agente.nombre)
+            inputAgente.appendChild(opcion)
         }
     })
+    inputAgente.value = valorActual
 }
 function mensajeBajoFiltros(status, msg) {
     const mensajeElemento = document.getElementById('p')
