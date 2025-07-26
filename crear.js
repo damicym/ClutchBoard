@@ -676,7 +676,7 @@ formCrear.addEventListener('submit', async(event) => {
                             Cargando...`
    
     // mostrarToast('loading', 'Cargando...')
-    card2.style.setProperty('--after-text', '"La primera vez podría tardar hasta 50s en publicar"');
+    card2.style.setProperty('--after-text', '"La primera vez podría tardar hasta 50s en publicarse"');
     const formData = new FormData(event.target)
     const formObject = Object.fromEntries(formData.entries())
 
